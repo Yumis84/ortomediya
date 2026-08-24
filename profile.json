@@ -1,0 +1,13 @@
+{
+  "profile_id":"demo-ortomediya",
+  "name":"Ортомедия",
+  "aliases":["Ортомедия","ООО «Ортомедия»"],
+  "location":{"city":"Калининград","country":"RU"},
+  "verification_status":"unverified",
+  "identity_status":"resolved_for_demo",
+  "reviews":{"count":281,"sources":3,"endpoint":"reviews.json"},
+  "ratings_by_source":[{"source":"Яндекс","rating":4.8,"review_count":126},{"source":"2ГИС","rating":4.7,"review_count":94},{"source":"Google","rating":4.6,"review_count":61}],
+  "otzovik_rating":null,
+  "ai_summary":{"status":"demo","confidence_level":"high","based_on_review_count":281,"based_on_source_count":3,"generated_at":"2026-08-24","prompt_version":"otzovik-summary-v1.0","source_data_version":"demo-v1","disclaimer":"Не является рекомендацией и не заменяет чтение оригинальных отзывов.","claims":[{"text":"В отзывах часто упоминается отношение персонала.","mention_count":34,"supporting_review_ids":["demo-r1","demo-r2"]}]},
+  "data_status_flags":["demo_data","unverified"]
+}
