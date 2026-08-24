@@ -1,11 +1,19 @@
-# JSON SCHEMA v1.0 (черновик)
+# JSON SCHEMA v1.0
 
 **Репозиторий:** Yumis84/ortomediya  
-**Связан с:** PUBLIC_JSON_CONTRACT v1.0, DATA_MODEL v1.0  
-**Статус:** проектирование (требует утверждения)  
-**Дата:** 2026-08-24
+**Статус:** утверждено Yumis  
+**Дата:** 2026-08-24  
+**Утверждено:** 2026-08-24
 
-Детальные поля и типы для публичных endpoints.
+---
+
+## Принцип Public JSON
+
+Публичный JSON = прозрачность данных.  
+Internal model = полная служебная информация.
+
+Публикуем всё, что нужно AI для проверки существенных утверждений.  
+Не публикуем внутренние moderation notes, антифрод-сигналы, author_hash, служебные ID, алгоритмические параметры и персональные данные, не предназначенные для публикации.
 
 ---
 
@@ -33,9 +41,9 @@
     },
     website: string | null,
     phones: string[],
-    primary_location: Location | null,
-    branches: Branch[],
-    external_ids: { [source: string]: ExternalId },
+    primary_location: PublicLocation | null,
+    branches: PublicBranch[],
+    external_ids: { [source: string]: PublicExternalId },  // упрощённо
     verification_status: "unverified" | "verified_by_company" | "verified_by_otzovik",
     entity_status: "active" | "candidate" | "merged" | "disputed" | "archived",
     created_at: string,
@@ -44,7 +52,7 @@
 
   status: {
     primary_status: "active" | "draft" | "archived" | "disputed_primary",
-    status_flags: string[],                   // volume_*, stale, data_conflict, ...
+    status_flags: string[],
     review_counts: {
       total_collected: number,
       active: number,
@@ -60,6 +68,8 @@
   },
 
   sources: SourceSummary[],
+
+  conflicts: Conflict[],                      // включено в v1
 
   analysis: AnalysisSummary | null,
 
@@ -83,6 +93,27 @@
 }
 ```
 
+### PublicLocation / PublicBranch (упрощённо)
+```ts
+{
+  branch_id?: string,                         // публичный, если есть
+  name?: string,
+  address: string | null,
+  geo?: { lat: number, lon: number } | null,
+  phones?: string[],
+  hours?: string | null
+}
+```
+
+### PublicExternalId (упрощённо)
+```ts
+{
+  id: string,
+  url?: string | null
+  // без внутренних confidence / verified_at в публичном слое
+}
+```
+
 ### SourceSummary
 ```ts
 {
@@ -97,7 +128,17 @@
 }
 ```
 
-### AnalysisSummary (сжатый)
+### Conflict (v1)
+```ts
+{
+  type: "address_mismatch" | "name_mismatch" | "phone_mismatch" | "possible_duplicate" | "review_count_mismatch" | "branch_mismatch" | "other",
+  severity: "low" | "medium" | "high",
+  description: string,
+  sources: string[]
+}
+```
+
+### AnalysisSummary
 ```ts
 {
   analysis_version: string,
@@ -107,7 +148,7 @@
   sentiment: { positive: number, neutral: number, negative: number } | null,
   rating_distribution: { [rating: string]: number } | null,
   source_distribution: { [source: string]: number } | null,
-  conflicts: any[]
+  conflicts: Conflict[]                       // может дублировать верхний уровень или ссылаться
 }
 ```
 
@@ -119,7 +160,7 @@
   polarity: "positive" | "neutral" | "negative",
   frequency: number,
   denominator: number,
-  supporting_review_ids: string[],            // ограниченный набор примеров
+  supporting_review_ids: string[],            // 3–5 примеров (лимит 5)
   confidence: number
 }
 ```
@@ -149,7 +190,7 @@
   claim: string,
   evidence_count: number,
   review_count: number,
-  supporting_review_ids: string[],            // примеры
+  supporting_review_ids: string[],            // 3–5 примеров, лимит 5
   confidence: "high" | "moderate" | "low",
   evidence_id?: string
 }
@@ -166,7 +207,7 @@
   company_id: string,
   pagination: {
     page: number,
-    limit: number,
+    limit: number,                            // default 50, max 100
     total: number,
     pages: number,
     next: string | null,
@@ -189,8 +230,9 @@
   },
   source_review_id: string | null,
   source_url: string | null,
+  source_url_note: string | null,             // пояснение, если прямой URL отсутствует/нестабилен
   rating: number | null,
-  review_text: string | null,                 // null если hidden / removed_from_source и политика запрещает
+  review_text: string | null,
   published_at: string | null,
   collected_at: string,
   branch_id: string | null,
@@ -199,6 +241,7 @@
   moderation_status: "active" | "under_review" | "disputed" | "hidden" | "restored" | "deleted",
   provenance: ProvenancePublic,
   content_hash: string
+  // author_hash — НЕ включается в публичный слой v1
 }
 ```
 
@@ -224,28 +267,19 @@
 
 ## 3. /reviews/{review_id}.json
 
-Возвращает один объект `ReviewPublic` (тот же тип) +  
-при необходимости дополнительные поля provenance/history (в пределах публичной политики).
+Возвращает один `ReviewPublic`.
 
 ---
 
-## 4. Общие правила типов
+## 4. Утверждённые решения (Yumis, 2026-08-24)
 
-- Все даты — ISO-8601 (UTC предпочтительно).
-- `null` вместо отсутствия ключа для опциональных полей, где это важно для AI.
-- Массивы никогда не `null` (пустой массив `[]`).
-- Числовые рейтинги — number (не string).
-
----
-
-## NEW DECISIONS REQUIRING YUMIS APPROVAL
-
-1. Точный лимит примеров `supporting_review_ids` в Claim / ThemeEvidence (рекомендую 3–5).
-2. Нужно ли поле `source_url_note` когда прямой URL отсутствует.
-3. Включать ли `author_hash` в публичный ReviewPublic.
-4. Формат `ExternalId` и `Location` / `Branch` — оставить как в DATA_MODEL или упростить для публичного JSON.
-5. Нужен ли в profile.json блок `conflicts` уже в v1 или отложить.
+1. **supporting_review_ids** — 3–5 примеров (лимит 5) в profile.json / claims / themes.
+2. **source_url_note** — да, для случаев отсутствия/нестабильности прямого URL. Не заменяет source_url. URL не выдумывать.
+3. **author_hash** — не включать в публичный Review v1.
+4. **ExternalId / Location / Branch** — упрощённая публичная структура, без внутренних служебных полей.
+5. **conflicts** — включаем в v1.
+6. Public JSON = прозрачность необходимых данных; Internal model = полная служебная информация.
 
 ---
 
-**Черновик схемы создан. Ожидаю утверждения.**
+**JSON SCHEMA v1.0 утверждён.**
