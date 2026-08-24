@@ -14,33 +14,31 @@
 - Все дальнейшие решения согласовываются с Yumis.
 
 - **DATA MODEL v1.0** создан и утверждён (`docs/DATA_MODEL.md`).
-  - Сущности: Company, Review, Source, Provenance, Evidence, Analysis, AI Summary, Profile Status, Versioning.
-  - Status flags (не один enum).
-  - Проверка 12 архитектурных вопросов — пройдена.
 
-### Согласовано Yumis (ранее NEW DECISIONS REQUIRING YUMIS APPROVAL)
+### Согласовано Yumis (DATA_MODEL)
 
-1. **Формат `otzovik_id`** — ULID.
-2. **Пороги volume-флагов**:
-   - `no_reviews` = 0
-   - `very_low_volume` = 1–4
-   - `low_volume` = 5–19
-   - `medium_volume` = 20–99
-   - `high_volume` = 100+
-3. **`original_snapshot`** при `removed_from_source` — храним метаданные + content_hash + (по возможности) полный текст во внутреннем слое. Публично текст не показываем, если источник удалил.
-4. **Публикация текста** при `removed_from_source` / `hidden` / `disputed`:
-   - Публично: факт существования + статус + provenance (без полного текста, если юридически/этически нельзя).
-   - Machine-readable и audit: сохраняем возможность восстановления истории.
-5. **`identity_confidence`** — только во внутреннем / machine-readable слое, не в основном человеческом UI.
-6. **Справочник Sources** — глобальный + usage per company.
-7. **Audit trail** — versioning + минимальный event log изменений статусов отзывов и профиля.
-8. **`language`** — включаем в Review уже в v1 (nullable).
-9. **`temporal_trends`** — в v1 оставляем `null` / заготовку.
-10. **Корень модели** — Company является корнем. Отдельный объект-обёртка `Profile` не вводим.
+1. `otzovik_id` = ULID
+2. Пороги volume-флагов зафиксированы
+3–4. Политика snapshot и публикации текста
+5. `identity_confidence` — только machine-readable
+6. Sources — глобальный справочник
+7. Versioning + минимальный event log
+8. `language` в v1
+9. `temporal_trends` = null в v1
+10. Company = корень модели
 
-- **REVIEW LIFECYCLE v1.0** создан (`docs/REVIEW_LIFECYCLE.md`).
-  - Детализированы статусы, правила публикации текста, влияние на Analysis/Summary, audit trail.
-  - Новые решения, требующие утверждения, вынесены в конец документа.
+- **REVIEW LIFECYCLE v1.0** утверждён Yumis (`docs/REVIEW_LIFECYCLE.md`).
+
+### Утверждено Yumis (REVIEW LIFECYCLE)
+
+1. **Disputed reviews** — сохраняются, status=`disputed`, в Analysis с пониженным весом / маркировкой; AI Summary обязан учитывать спор; после финального решения — пересчёт.
+2. **Публичный счётчик удалённых** — не показываем крупный счётчик. Факт удаления в provenance; у конкретного отзыва можно показать «больше недоступен в источнике».
+3. **Хранение полных текстов** — во внутреннем слое (если допустимо). Публикация зависит от источника и юридической модели. Сроки → отдельная Data Retention Policy. Бессрочное хранение не утверждается.
+4. **Кто меняет status**:
+   - Сборщик → только Source Status.
+   - `hidden` / `disputed` → только moderation workflow.
+   - Компания может оспорить / предоставить доказательства / запросить проверку, но не удалять и не редактировать отзыв.
+5. **Source Status и Otzovik Moderation Status** хранятся раздельно и не смешиваются.
 
 ---
 
