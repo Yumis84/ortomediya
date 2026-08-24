@@ -17,16 +17,19 @@
 - MODERATION WORKFLOW v1.0
 - MACHINE READABLE CONTRACT v1.0
 - PUBLIC JSON CONTRACT v1.0
-- **JSON SCHEMA v1.0**
+- JSON SCHEMA v1.0
+- **IDENTITY RESOLUTION v1.0**
 
-### Утверждено Yumis (JSON SCHEMA v1)
+### Утверждено Yumis (IDENTITY RESOLUTION)
 
-1. supporting_review_ids в profile.json / claims / themes — 3–5 примеров (лимит 5).
-2. source_url_note — да; пояснение при отсутствии/нестабильности URL; URL не выдумывать.
-3. author_hash — не включать в публичный Review v1.
-4. ExternalId / Location / Branch — упрощённая публичная структура без служебных полей.
-5. conflicts — включаем в v1.
-6. Public JSON = прозрачность необходимых данных; Internal model = полная служебная информация.
+1. Автоматическое связывание только при достаточном наборе сигналов; критические расхождения блокируют.
+2. Aliases — публично только полезные варианты.
+3. INN/OGRN — условная публикация.
+4. Merge — полуавтоматический; unmerge обязателен.
+5. ENTITY ≠ COMPANY PROFILE.
+6. `/entity/{id}.json` в v1 не делаем.
+7. При сомнении — не объединять; показывать needs_review / conflicts.
+8. Отзыв не переносится только по названию.
 
 ---
 
