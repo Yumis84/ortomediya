@@ -14,17 +14,20 @@
 - **DATA MODEL v1.0** утверждён.
 - **REVIEW LIFECYCLE v1.0** утверждён.
 - **MODERATION WORKFLOW v1.0** утверждён.
+- **MACHINE READABLE CONTRACT v1.0** утверждён.
 
-### Утверждено Yumis (MODERATION WORKFLOW)
+### Утверждено Yumis (MACHINE READABLE CONTRACT)
 
-1. **resolved_upheld** → moderation_status = `active`, нормальный вес, без постоянной метки «оспорен». История сохраняется. ≠ hidden.
-2. **Company Statement** — отдельный объект. Не отзыв, не меняет оценку/текст, не попадает в Analysis как мнение клиента. AI Summary обязан различать. Компания не может удалить отзыв через statement.
-3. **Повторное оспаривание** допускается при новых основаниях/доказательствах. Без новых обстоятельств — можно закрыть без полного рассмотрения. История сохраняется.
-4. **reason_code** (минимальный набор): wrong_company, wrong_branch, duplicate, fabricated_or_suspicious, offensive_or_illegal_content, privacy_violation, factual_error, source_removed, other (с текстом).
-5. **under_review** — нужен. Отзыв остаётся видимым с меткой «оспорен и находится на проверке».
-6. Компания может оспорить / дать доказательства / оставить statement. Решение принимает Отзовик независимо.
-7. Во время under_review влияние может быть снижено; после resolved_upheld — нормальный вес; после hidden/deleted — исключение из активного набора + пересчёт.
-8. Сущности разделены: REVIEW / COMPANY STATEMENT / MODERATION CASE / SOURCE STATUS / MODERATION STATUS.
+1. Канонический путь — `/profile.json`.
+2. Полный dump всех отзывов в profile.json **не** делаем.
+3. Отзывы вынесены в `/reviews.json` с пагинацией и фильтрами.
+4. Статусы `under_review` / `disputed` передаются с явным статусом; `hidden` не в активном наборе.
+5. Machine-readable слой информативнее визуального UI.
+6. Schema.org — минимальный (LocalBusiness + необходимые поля), не хранилище нашей аналитики.
+7. Source of Truth — единая модель данных; HTML / JSON / JSON-LD / llms.txt — представления.
+8. Не создаём отдельные системы данных для человека и AI.
+9. llms.txt — навигационный документ, не источник истины.
+10. Публичный JSON содержит только допустимые для публикации данные.
 
 ---
 
