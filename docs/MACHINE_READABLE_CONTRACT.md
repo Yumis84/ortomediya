@@ -1,102 +1,156 @@
-# MACHINE READABLE CONTRACT v1.0 (черновик)
+# MACHINE READABLE CONTRACT v1.0
 
 **Репозиторий:** Yumis84/ortomediya  
-**Цель:** определить, как AI-агент и другие системы получают полный структурированный профиль без JavaScript и без догадок.  
-**Статус:** проектирование (требует утверждения)  
-**Дата:** 2026-08-24
+**Статус:** утверждено Yumis  
+**Дата:** 2026-08-24  
+**Утверждено:** 2026-08-24
 
 ---
 
-## 1. Обязательные точки доступа
+## 1. Канонические точки доступа
 
 | Ресурс | Назначение |
 |--------|------------|
-| `/` или `/index.html` | Человеческая HTML-страница + semantic HTML + JSON-LD |
-| `/profile.json` | Полный machine-readable dump профиля |
-| `/llms.txt` или `/ai.txt` | Краткие правила использования для LLM/агентов |
-| JSON-LD в `<head>` | Schema.org (Organization, AggregateRating, Review и т.д.) |
+| `/profile.json` | **Канонический** machine-readable профиль компании |
+| `/reviews.json` | Отзывы с пагинацией и фильтрами |
+| `/` (HTML) | Человеческая страница + semantic HTML + JSON-LD |
+| JSON-LD | Стандартный слой совместимости (строится из той же модели) |
+| `llms.txt` / `ai.txt` | Навигационный/контекстный документ (не источник истины) |
 
-Все ключевые данные должны быть доступны **без выполнения JavaScript**.
-
----
-
-## 2. Минимальное содержимое `/profile.json`
-
-```json
-{
-  "schema_version": "1.0",
-  "generated_at": "ISO-8601",
-  "company": { /* Company object из DATA_MODEL */ },
-  "reviews": [ /* массив Review (с учётом moderation/source status) */ ],
-  "sources": [ /* используемые источники */ ],
-  "evidence": [ /* Evidence[] */ ],
-  "analysis": { /* Analysis object */ },
-  "ai_summary": { /* AI Summary object или null */ },
-  "company_statements": [ /* Company Statement[] */ ],
-  "status": {
-    "primary_status": "...",
-    "status_flags": ["..."]
-  },
-  "versions": {
-    "profile_version": "...",
-    "source_data_version": "...",
-    "analysis_version": "...",
-    "summary_version": "..."
-  }
-}
-```
+Дополнительно в будущем допускается `/profile.jsonld`, но он не является отдельным источником данных.
 
 ---
 
-## 3. Правила фильтрации в profile.json
+## 2. Source of Truth
 
-По умолчанию:
-- reviews с moderation_status in (`active`, `under_review`, `disputed`, `restored`)
-- для `removed_from_source` / `hidden` — можно включать как факты без полного текста (или отдельный флаг `include_removed=true`)
+Единая модель данных:
 
-AI Summary и Analysis всегда ссылаются только на те review_id, которые присутствуют в выдаче (или явно помечены как исключённые).
+**FACT → EVIDENCE → ANALYSIS → AI SUMMARY**
 
----
-
-## 4. Разделение слоёв в JSON
-
-- `reviews[].review_text` + rating + published_at = FACT
-- `evidence` + `analysis` = производные
-- `ai_summary` = вторичный слой с claims → evidence_id → supporting_review_ids
-- `company_statements` = отдельный массив, никогда не внутри reviews
+HTML, JSON, JSON-LD, llms.txt, AI Summary — **представления** одной модели.  
+Не создаём отдельные независимые системы данных для человека и AI.
 
 ---
 
-## 5. JSON-LD (минимум)
+## 3. /profile.json — каноническая точка входа
 
-- `@type`: Organization / LocalBusiness
-- name, url, address, telephone
-- aggregateRating (только если есть данные источников, без «Рейтинга Отзовика»)
-- review[] (выборка или ссылка на полный набор)
+AI-агент начинает с `/profile.json`.
 
-Не выдавать агрегированный «рейтинг Отзовика».
+Содержимое (без полного массива отзывов):
 
----
-
-## 6. llms.txt / ai.txt (черновик содержания)
-
-- Краткое описание проекта
-- Ссылка на /profile.json
-- Принцип FACT → EVIDENCE → ANALYSIS → AI SUMMARY
-- Запрет воспринимать AI Summary как рекомендацию
-- Указание, что Company Statement ≠ отзыв клиента
-- Контакт для ошибок / оспаривания
-
----
-
-## NEW DECISIONS REQUIRING YUMIS APPROVAL
-
-1. Точный путь: `/profile.json` vs `/.well-known/otzovik-profile.json` vs оба.
-2. Нужна ли пагинация / cursor в profile.json при очень большом числе отзывов (или всегда полный dump на первом этапе).
-3. Включать ли по умолчанию reviews со status `under_review` и `disputed` в profile.json.
-4. Минимальный обязательный набор Schema.org типов.
-5. Нужен ли отдельный `/reviews.json` или достаточно одного profile.json.
+- идентичность компании (Company)
+- основные данные, филиалы, контакты
+- источники + рейтинги источников
+- количество отзывов (общее и по статусам)
+- статусы профиля
+- Analysis (сжатый)
+- AI Summary
+- Company Statements (если есть)
+- ссылки:
+  - человеческая страница
+  - `/reviews.json`
+  - JSON-LD
+  - документация контракта (если нужно)
 
 ---
 
-**Черновик создан. Ожидаю утверждения.**
+## 4. /reviews.json
+
+Отдельный endpoint с пагинацией и фильтрами.
+
+Поддерживаемые параметры (точные имена — позже):
+
+- `page` / `limit` (или cursor)
+- `source`
+- `rating`
+- `date_from` / `date_to`
+- `branch`
+- `status` (moderation_status / source_status)
+
+Пользовательский UI продолжает показывать **единый общий список** отзывов.
+
+---
+
+## 5. Статусы отзывов в machine-readable слое
+
+По умолчанию **не скрываем** статусы от AI.
+
+- `active` — обычный
+- `under_review` / `disputed` — присутствуют **с обязательным статусом**; AI не должен воспринимать их как полностью обычные
+- `hidden` — **не** попадают в обычный активный набор
+- `removed_from_source` — могут присутствовать как факты (без полного текста), со статусом
+
+AI получает полный статус каждого отзыва.
+
+---
+
+## 6. Принцип информативности
+
+Machine-readable слой должен быть **более информативным**, чем визуальный интерфейс.
+
+AI должен иметь возможность понять:
+- что за компания;
+- какие данные подтверждены;
+- источники;
+- сколько отзывов и каких статусов;
+- свежесть;
+- конфликты;
+- как сформирован Analysis;
+- когда и на каких данных создан AI Summary.
+
+---
+
+## 7. Schema.org (минимальный)
+
+Основной тип: `LocalBusiness`  
+(при корректной медицинской специализации — более конкретный тип, если данные позволяют).
+
+Минимальные поля:
+- `@context`, `@type`, `@id`
+- `name`, `url`, `telephone`
+- `address`, `geo` (если достоверно)
+- `openingHoursSpecification` (если достоверно)
+- `sameAs` (только подтверждённые официальные профили)
+
+**Не** превращать Schema.org в хранилище отзывов, provenance, moderation statuses, Analysis и AI Summary.
+
+Наш `/profile.json` + `/reviews.json` — канонический расширенный контракт.
+
+---
+
+## 8. llms.txt
+
+Архитектурно закладываем.  
+Это навигационный/контекстный документ.  
+**Не** второй источник истины.  
+Все факты — из канонического machine-readable слоя.
+
+---
+
+## 9. Публичные vs скрытые данные
+
+Публичный JSON содержит **только** допустимые для публикации данные.
+
+Не раскрываем:
+- внутренние данные модерации;
+- персональные данные сверх необходимого;
+- служебную информацию.
+
+---
+
+## 10. Утверждённые решения (Yumis, 2026-08-24)
+
+1. Основной путь — `/profile.json`.
+2. Полный dump всех отзывов в profile.json **не** делаем.
+3. Отзывы — отдельный `/reviews.json` с пагинацией/фильтрами.
+4. Статусы `under_review` / `disputed` передаём с явным статусом; `hidden` не в активном наборе.
+5. Machine-readable информативнее UI.
+6. Schema.org — минимальный LocalBusiness (+ совместимость), не наша БД.
+7. Source of Truth — единая модель; все представления генерируются из неё.
+8. Не создаём отдельные системы данных для человека и AI.
+
+---
+
+**MACHINE READABLE CONTRACT v1.0 утверждён.**
+
+Следующий шаг: точная структура публичного JSON-контракта v1.0 + правила provenance.
