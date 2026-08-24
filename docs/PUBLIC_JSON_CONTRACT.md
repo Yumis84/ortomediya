@@ -1,234 +1,190 @@
-# PUBLIC JSON CONTRACT v1.0 (черновик)
+# PUBLIC JSON CONTRACT v1.0
 
 **Репозиторий:** Yumis84/ortomediya  
-**Связан с:** MACHINE_READABLE_CONTRACT v1.0, DATA_MODEL v1.0  
-**Статус:** проектирование (требует утверждения)  
-**Дата:** 2026-08-24
-
-Точная структура публичного machine-readable контракта и правила provenance, чтобы AI мог проверить происхождение каждого существенного утверждения.
+**Статус:** утверждено Yumis  
+**Дата:** 2026-08-24  
+**Утверждено:** 2026-08-24
 
 ---
 
-## 1. /profile.json — структура
+## 1. Каноническая цепочка проверки
 
-```json
-{
-  "schema_version": "1.0",
-  "generated_at": "2026-08-24T01:00:00Z",
-  "profile_url": "https://ortomediya.отзыв.com",
-  "canonical_json": "https://ortomediya.отзыв.com/profile.json",
-  "reviews_endpoint": "https://ortomediya.отзыв.com/reviews.json",
-
-  "company": {
-    "otzovik_id": "otz_01J...",
-    "slug": "ortomediya",
-    "name": "Ортомедия",
-    "legal_name": null,
-    "aliases": [],
-    "description": { "short": "...", "full": "..." },
-    "website": null,
-    "phones": [],
-    "primary_location": {},
-    "branches": [],
-    "external_ids": {},
-    "verification_status": "unverified",
-    "entity_status": "active",
-    "created_at": "...",
-    "updated_at": "..."
-  },
-
-  "status": {
-    "primary_status": "active",
-    "status_flags": ["medium_volume", "unverified"],
-    "review_counts": {
-      "total_collected": 281,
-      "active": 270,
-      "under_review": 3,
-      "disputed": 2,
-      "hidden": 4,
-      "removed_from_source": 6
-    },
-    "data_freshness": {
-      "last_successful_collection": "2026-08-20T10:00:00Z",
-      "stale": false
-    }
-  },
-
-  "sources": [
-    {
-      "source_id": "src_yandex",
-      "type": "yandex",
-      "name": "Яндекс",
-      "rating": 4.7,
-      "review_count": 150,
-      "last_review_at": "2026-07-01",
-      "url": "https://...",
-      "source_status": "active"
-    }
-  ],
-
-  "analysis": {
-    "analysis_version": "v1",
-    "source_data_version": "...",
-    "generated_at": "...",
-    "themes": [
-      {
-        "evidence_id": "ev_01J...",
-        "label": "вежливость персонала",
-        "polarity": "positive",
-        "frequency": 34,
-        "denominator": 270,
-        "supporting_review_ids": ["rev_001", "rev_014"],
-        "confidence": 0.87
-      }
-    ],
-    "sentiment": { "positive": 0.62, "neutral": 0.21, "negative": 0.17 },
-    "rating_distribution": { "1": 12, "2": 8, "3": 25, "4": 90, "5": 146 },
-    "source_distribution": {},
-    "conflicts": []
-  },
-
-  "ai_summary": {
-    "summary_id": "sum_01J...",
-    "text": "...",
-    "generated_at": "...",
-    "model": "...",
-    "prompt_version": "otzovik-summary-v1.0",
-    "source_data_version": "...",
-    "based_on_review_count": 270,
-    "based_on_source_count": 3,
-    "confidence_level": "high",
-    "data_status_flags": [],
-    "claims": [
-      {
-        "text": "В отзывах часто отмечается вежливость персонала",
-        "evidence_id": "ev_01J...",
-        "supporting_review_ids": ["rev_001", "rev_014"],
-        "frequency": 34,
-        "denominator": 270
-      }
-    ],
-    "disclaimer": "Не является рекомендацией и не заменяет чтение оригинальных отзывов."
-  },
-
-  "company_statements": [],
-
-  "versions": {
-    "profile_version": "1.0.0",
-    "source_data_version": "2026-08-20T10:00:00Z",
-    "analysis_version": "v1",
-    "summary_version": "..."
-  },
-
-  "links": {
-    "html": "https://ortomediya.отзыв.com",
-    "reviews": "https://ortomediya.отзыв.com/reviews.json",
-    "jsonld": "https://ortomediya.отзыв.com/#jsonld",
-    "llms_txt": "https://ortomediya.отзыв.com/llms.txt"
-  }
-}
+```
+PROFILE (/profile.json)
+  ↓
+AI SUMMARY
+  ↓
+ANALYSIS / EVIDENCE
+  ↓
+supporting_review_ids (примеры)
+  ↓
+REVIEW (/reviews/{review_id}.json или /reviews.json)
+  ↓
+PROVENANCE
+  ↓
+SOURCE
 ```
 
+AI-агент должен иметь возможность пройти эту цепочку и проверить существенное утверждение.
+
 ---
 
-## 2. /reviews.json — структура ответа
+## 2. Пагинация (утверждено)
+
+Простая пагинация:
+
+`?page=1&limit=50`
+
+- Стандартный limit: **50**
+- Максимальный limit: **100** (больше — возвращается 100)
+- По умолчанию: `limit=50`
+- Cursor pagination в v1 **не** используем (архитектура не должна мешать переходу позже)
+
+Объект pagination:
 
 ```json
-{
-  "schema_version": "1.0",
-  "generated_at": "...",
-  "company_id": "otz_01J...",
+"pagination": {
   "page": 1,
   "limit": 50,
-  "total": 270,
-  "next": "https://ortomediya.отзыв.com/reviews.json?page=2&limit=50",
-  "filters_applied": {},
-  "reviews": [
-    {
-      "review_id": "rev_001",
-      "source": {
-        "type": "yandex",
-        "name": "Яндекс",
-        "source_id": "src_yandex"
-      },
-      "source_review_id": "y_987654",
-      "source_url": "https://...",
-      "rating": 5,
-      "review_text": "Вежливый персонал, всё объяснили.",
-      "published_at": "2025-11-12T00:00:00Z",
-      "collected_at": "2026-08-20T10:15:00Z",
-      "branch_id": null,
-      "language": "ru",
-      "source_status": "active",
-      "moderation_status": "active",
-      "provenance": {
-        "origin": {
-          "source_id": "src_yandex",
-          "source_type": "yandex",
-          "source_url": "https://...",
-          "source_review_id": "y_987654"
-        },
-        "published_at": "2025-11-12T00:00:00Z",
-        "collected_at": "2026-08-20T10:15:00Z",
-        "collection_method": "public_page",
-        "was_modified": false,
-        "verifiable": true,
-        "confidence": 0.98
-      },
-      "content_hash": "sha256:..."
-    }
-  ]
+  "total": 281,
+  "pages": 6,
+  "next": "/reviews.json?page=2&limit=50",
+  "prev": null
 }
 ```
 
-Для `removed_from_source` / `hidden`:
-- `review_text` может быть `null` или отсутствовать;
-- статус обязателен;
-- provenance сохраняется.
+---
+
+## 3. Endpoints
+
+| Endpoint | Назначение |
+|----------|------------|
+| `/profile.json` | Канонический профиль (без полного массива отзывов) |
+| `/reviews.json` | Единый список отзывов с пагинацией и фильтрами |
+| `/reviews/{review_id}.json` | Один конкретный отзыв + provenance (для проверки supporting_review_ids) |
+
+Фильтр по источнику допускается: `/reviews.json?source=yandex`  
+Это фильтрация **одного общего набора**, а не отдельные разделы.
 
 ---
 
-## 3. Правила provenance (проверка утверждений)
+## 4. /profile.json — обязательные блоки
 
-Любое существенное утверждение в Analysis или AI Summary должно быть прослеживаемо:
+- identity (company)
+- sources + source_ratings
+- review_count (с разбивкой по статусам)
+- data_freshness
+- profile_status / verification_status
+- conflicts (если есть)
+- analysis (сжатый)
+- ai_summary
+- company_statements (если есть)
+- endpoints / links
+- versions (`contract_version`, `data_version`, …)
 
+Ссылки:
+- `reviews_endpoint`
+- `human_profile_url`
+- schema / jsonld (если есть)
+
+**Не** помещаем полный список `supporting_review_ids` для всех утверждений.
+
+Для каждого ключевого вывода AI Summary:
+- `evidence_count`
+- ограниченный набор `supporting_review_ids` (примеры)
+- при необходимости ссылка на Analysis/Evidence
+
+---
+
+## 5. AI Summary → Evidence (утверждено)
+
+```json
+{
+  "claim": "В отзывах часто упоминается отношение персонала",
+  "evidence_count": 34,
+  "review_count": 281,
+  "supporting_review_ids": ["R123", "R187", "R241"],
+  "confidence": "high"
+}
 ```
-Claim / Theme
-  → evidence_id
-    → supporting_review_ids[]
-      → Review (FACT)
-        → provenance.origin (source + source_url + source_review_id)
-        → published_at / collected_at
-        → content_hash
+
+Полный набор id доступен через `/reviews.json` или специализированный запрос.
+
+---
+
+## 6. Один Review = один объект
+
+Отзыв не дублируется из-за нескольких тем.
+
+Темы относятся к Analysis.  
+`review_id` остаётся единственным.
+
+---
+
+## 7. Provenance (минимум в публичном Review)
+
+- `review_id`
+- `company_id`
+- `source`
+- `source_review_id` (если доступен)
+- `source_url` (если допустимо и существует)
+- `published_at` / `review_date`
+- `collected_at`
+- `rating`
+- `text` (или null при hidden/removed)
+- `language`
+- `source_status`
+- `moderation_status`
+- `branch_id` (если определён)
+- `provenance` (origin, dates, method, verifiable, confidence)
+
+**Source URL:** не придумывать. Если стабильного URL нет — указать доступную ссылку на источник/страницу компании и явно обозначить ограничение.
+
+---
+
+## 8. Статусы
+
+JSON обязан различать:
+
+```json
+{
+  "source_status": "active",
+  "moderation_status": "under_review"
+}
 ```
 
-AI должен иметь возможность:
-1. Взять claim из AI Summary.
-2. Найти evidence_id.
-3. Получить supporting_review_ids.
-4. Запросить эти review_id через /reviews.json (или найти в выдаче).
-5. Проверить source_url / content_hash / даты.
+AI не должен интерпретировать `under_review` / `disputed` как обычный подтверждённый отзыв без оговорки.
 
 ---
 
-## 4. Что никогда не попадает в публичный JSON
+## 9. Никакого скрытого общего рейтинга
 
-- Внутренние moderator notes
-- Персональные данные авторов сверх author_hash
-- Полные тексты скрытых/удалённых отзывов (если политика запрещает)
-- Служебные флаги антифрода (можно агрегированные suspicious_flags без деталей)
-- identity_confidence (по ранее утверждённому решению — только внутренний слой)
+Запрещено поле вида `"otzovik_rating": 4.72` до утверждённой методологии.
+
+Только раздельные `source_ratings`.
 
 ---
 
-## NEW DECISIONS REQUIRING YUMIS APPROVAL
+## 10. Версионирование
 
-1. Точные имена query-параметров для /reviews.json (`page`+`limit` vs cursor-based).
-2. Максимальный `limit` по умолчанию и hard-limit.
-3. Нужно ли в /profile.json отдавать полный массив `supporting_review_ids` для каждой темы или достаточно evidence_id + frequency (полные id — только по запросу).
-4. Формат `next` (URL vs opaque cursor).
-5. Нужен ли endpoint `/reviews/{review_id}.json` для точечной проверки одного отзыва.
+- `contract_version`: "1.0"
+- `data_version` (profile / source_data)
+- `summary_version` (внутри AI Summary)
 
 ---
 
-**Черновик создан. Ожидаю утверждения.**
+## 11. Главный принцип
+
+Не делать JSON сложнее необходимого.
+
+AI должен:
+1. открыть `/profile.json`;
+2. понять компанию и состояние данных;
+3. увидеть Summary;
+4. при необходимости углубиться до конкретных отзывов и provenance.
+
+---
+
+**PUBLIC JSON CONTRACT v1.0 утверждён.**
+
+Следующий этап: детальная схема полей и типов для `profile.json` и `reviews.json`.
