@@ -11,24 +11,22 @@
 - Общий «Рейтинг Отзовика» не рассчитывается.
 - Код и дизайн не пишутся до отдельного задания.
 
-- **DATA MODEL v1.0** утверждён.
-- **REVIEW LIFECYCLE v1.0** утверждён.
-- **MODERATION WORKFLOW v1.0** утверждён.
-- **MACHINE READABLE CONTRACT v1.0** утверждён.
-- **PUBLIC JSON CONTRACT v1.0** утверждён.
+Утверждённые документы:
+- DATA MODEL v1.0
+- REVIEW LIFECYCLE v1.0
+- MODERATION WORKFLOW v1.0
+- MACHINE READABLE CONTRACT v1.0
+- PUBLIC JSON CONTRACT v1.0
+- **JSON SCHEMA v1.0**
 
-### Утверждено Yumis (PUBLIC JSON CONTRACT)
+### Утверждено Yumis (JSON SCHEMA v1)
 
-1. Пагинация v1: `?page=&limit=` (limit по умолчанию 50, max 100). Cursor — позже.
-2. В profile.json — только примеры supporting_review_ids + evidence_count; полный набор через reviews.
-3. Pagination object с page/limit/total/pages/next/prev.
-4. Endpoint `/reviews/{review_id}.json` обязателен для проверки цепочки.
-5. Provenance минимум зафиксирован; source_url не придумывать.
-6. Один review = один объект (темы не создают копии).
-7. Никакого `otzovik_rating` до методологии.
-8. source_status и moderation_status раздельно.
-9. contract_version / data_version / summary_version.
-10. Каноническая цепочка: Profile → AI Summary → Evidence → review_id → Review → Provenance → Source.
+1. supporting_review_ids в profile.json / claims / themes — 3–5 примеров (лимит 5).
+2. source_url_note — да; пояснение при отсутствии/нестабильности URL; URL не выдумывать.
+3. author_hash — не включать в публичный Review v1.
+4. ExternalId / Location / Branch — упрощённая публичная структура без служебных полей.
+5. conflicts — включаем в v1.
+6. Public JSON = прозрачность необходимых данных; Internal model = полная служебная информация.
 
 ---
 
