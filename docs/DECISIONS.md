@@ -4,41 +4,27 @@
 
 ## 2026-08-24
 
-- Создан репозиторий `Yumis84/ortomediya` как рабочее пространство эталонного профиля.
+- Создан репозиторий `Yumis84/ortomediya`.
 - Модель: одна компания → единый список всех отзывов.
-- `source` = атрибут отзыва, а не отдельный раздел.
-- Темы/тональность → только Analysis-слой; публично — единый список.
-- AI Summary строго отделён (FACT → EVIDENCE → ANALYSIS → AI SUMMARY).
+- `source` = атрибут отзыва.
+- FACT → EVIDENCE → ANALYSIS → AI SUMMARY.
 - Общий «Рейтинг Отзовика» не рассчитывается.
-- Код, дизайн и самостоятельные изменения архитектуры запрещены до отдельного задания.
-- Все дальнейшие решения согласовываются с Yumis.
+- Код и дизайн не пишутся до отдельного задания.
 
-- **DATA MODEL v1.0** создан и утверждён (`docs/DATA_MODEL.md`).
+- **DATA MODEL v1.0** утверждён.
+- **REVIEW LIFECYCLE v1.0** утверждён.
+- **MODERATION WORKFLOW v1.0** утверждён.
 
-### Согласовано Yumis (DATA_MODEL)
+### Утверждено Yumis (MODERATION WORKFLOW)
 
-1. `otzovik_id` = ULID
-2. Пороги volume-флагов зафиксированы
-3–4. Политика snapshot и публикации текста
-5. `identity_confidence` — только machine-readable
-6. Sources — глобальный справочник
-7. Versioning + минимальный event log
-8. `language` в v1
-9. `temporal_trends` = null в v1
-10. Company = корень модели
-
-- **REVIEW LIFECYCLE v1.0** утверждён Yumis (`docs/REVIEW_LIFECYCLE.md`).
-
-### Утверждено Yumis (REVIEW LIFECYCLE)
-
-1. **Disputed reviews** — сохраняются, status=`disputed`, в Analysis с пониженным весом / маркировкой; AI Summary обязан учитывать спор; после финального решения — пересчёт.
-2. **Публичный счётчик удалённых** — не показываем крупный счётчик. Факт удаления в provenance; у конкретного отзыва можно показать «больше недоступен в источнике».
-3. **Хранение полных текстов** — во внутреннем слое (если допустимо). Публикация зависит от источника и юридической модели. Сроки → отдельная Data Retention Policy. Бессрочное хранение не утверждается.
-4. **Кто меняет status**:
-   - Сборщик → только Source Status.
-   - `hidden` / `disputed` → только moderation workflow.
-   - Компания может оспорить / предоставить доказательства / запросить проверку, но не удалять и не редактировать отзыв.
-5. **Source Status и Otzovik Moderation Status** хранятся раздельно и не смешиваются.
+1. **resolved_upheld** → moderation_status = `active`, нормальный вес, без постоянной метки «оспорен». История сохраняется. ≠ hidden.
+2. **Company Statement** — отдельный объект. Не отзыв, не меняет оценку/текст, не попадает в Analysis как мнение клиента. AI Summary обязан различать. Компания не может удалить отзыв через statement.
+3. **Повторное оспаривание** допускается при новых основаниях/доказательствах. Без новых обстоятельств — можно закрыть без полного рассмотрения. История сохраняется.
+4. **reason_code** (минимальный набор): wrong_company, wrong_branch, duplicate, fabricated_or_suspicious, offensive_or_illegal_content, privacy_violation, factual_error, source_removed, other (с текстом).
+5. **under_review** — нужен. Отзыв остаётся видимым с меткой «оспорен и находится на проверке».
+6. Компания может оспорить / дать доказательства / оставить statement. Решение принимает Отзовик независимо.
+7. Во время under_review влияние может быть снижено; после resolved_upheld — нормальный вес; после hidden/deleted — исключение из активного набора + пересчёт.
+8. Сущности разделены: REVIEW / COMPANY STATEMENT / MODERATION CASE / SOURCE STATUS / MODERATION STATUS.
 
 ---
 
