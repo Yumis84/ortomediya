@@ -15,19 +15,20 @@
 - **REVIEW LIFECYCLE v1.0** утверждён.
 - **MODERATION WORKFLOW v1.0** утверждён.
 - **MACHINE READABLE CONTRACT v1.0** утверждён.
+- **PUBLIC JSON CONTRACT v1.0** утверждён.
 
-### Утверждено Yumis (MACHINE READABLE CONTRACT)
+### Утверждено Yumis (PUBLIC JSON CONTRACT)
 
-1. Канонический путь — `/profile.json`.
-2. Полный dump всех отзывов в profile.json **не** делаем.
-3. Отзывы вынесены в `/reviews.json` с пагинацией и фильтрами.
-4. Статусы `under_review` / `disputed` передаются с явным статусом; `hidden` не в активном наборе.
-5. Machine-readable слой информативнее визуального UI.
-6. Schema.org — минимальный (LocalBusiness + необходимые поля), не хранилище нашей аналитики.
-7. Source of Truth — единая модель данных; HTML / JSON / JSON-LD / llms.txt — представления.
-8. Не создаём отдельные системы данных для человека и AI.
-9. llms.txt — навигационный документ, не источник истины.
-10. Публичный JSON содержит только допустимые для публикации данные.
+1. Пагинация v1: `?page=&limit=` (limit по умолчанию 50, max 100). Cursor — позже.
+2. В profile.json — только примеры supporting_review_ids + evidence_count; полный набор через reviews.
+3. Pagination object с page/limit/total/pages/next/prev.
+4. Endpoint `/reviews/{review_id}.json` обязателен для проверки цепочки.
+5. Provenance минимум зафиксирован; source_url не придумывать.
+6. Один review = один объект (темы не создают копии).
+7. Никакого `otzovik_rating` до методологии.
+8. source_status и moderation_status раздельно.
+9. contract_version / data_version / summary_version.
+10. Каноническая цепочка: Profile → AI Summary → Evidence → review_id → Review → Provenance → Source.
 
 ---
 
