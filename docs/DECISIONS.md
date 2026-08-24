@@ -13,9 +13,8 @@
 - Код, дизайн и самостоятельные изменения архитектуры запрещены до отдельного задания.
 - Все дальнейшие решения согласовываются с Yumis.
 
-- **DATA MODEL v1.0** создан (`docs/DATA_MODEL.md`).
+- **DATA MODEL v1.0** создан и утверждён (`docs/DATA_MODEL.md`).
   - Сущности: Company, Review, Source, Provenance, Evidence, Analysis, AI Summary, Profile Status, Versioning.
-  - Жизненный цикл отзывов (active / removed_from_source / disputed / …).
   - Status flags (не один enum).
   - Проверка 12 архитектурных вопросов — пройдена.
 
@@ -34,10 +33,14 @@
    - Machine-readable и audit: сохраняем возможность восстановления истории.
 5. **`identity_confidence`** — только во внутреннем / machine-readable слое, не в основном человеческом UI.
 6. **Справочник Sources** — глобальный + usage per company.
-7. **Audit trail** — versioning + минимальный event log изменений статусов отзывов и профиля (достаточно для point-in-time на первом этапе).
+7. **Audit trail** — versioning + минимальный event log изменений статусов отзывов и профиля.
 8. **`language`** — включаем в Review уже в v1 (nullable).
-9. **`temporal_trends`** — в v1 оставляем `null` / заготовку, минимальный формат определим позже.
+9. **`temporal_trends`** — в v1 оставляем `null` / заготовку.
 10. **Корень модели** — Company является корнем. Отдельный объект-обёртка `Profile` не вводим.
+
+- **REVIEW LIFECYCLE v1.0** создан (`docs/REVIEW_LIFECYCLE.md`).
+  - Детализированы статусы, правила публикации текста, влияние на Analysis/Summary, audit trail.
+  - Новые решения, требующие утверждения, вынесены в конец документа.
 
 ---
 
