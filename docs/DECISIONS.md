@@ -13,6 +13,13 @@
 - Код, дизайн и самостоятельные изменения архитектуры запрещены до отдельного задания.
 - Все дальнейшие решения согласовываются с Yumis.
 
+- **DATA MODEL v1.0** создан (`docs/DATA_MODEL.md`).
+  - Сущности: Company, Review, Source, Provenance, Evidence, Analysis, AI Summary, Profile Status, Versioning.
+  - Жизненный цикл отзывов (active / removed_from_source / disputed / …).
+  - Status flags (не один enum).
+  - Проверка 12 архитектурных вопросов — пройдена.
+  - Новые решения, требующие утверждения Yumis, вынесены в конец DATA_MODEL.md.
+
 ---
 
 Добавлять новые записи только после согласования.
