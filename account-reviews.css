@@ -1,0 +1,16 @@
+@import url("account-preview.css");
+.summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:16px}
+.summary article,.queue,.response,.rules,.rule{border:1px solid var(--line);border-radius:16px;background:#fff}
+.summary article{padding:16px}.summary b,.summary span{display:block}.summary b{font-size:22px}.summary span{color:var(--muted);font-size:11px}
+.review-layout{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(260px,.75fr);gap:16px}
+.queue,.response{padding:20px}.queue small,.response small{color:var(--blue);font-size:10px;font-weight:900;letter-spacing:.1em}
+.section-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.section-head h2,.response h2{margin:3px 0}
+.section-head select{max-width:150px;padding:9px;border:1px solid var(--line);border-radius:10px;background:#f8fafc;color:var(--muted)}
+.empty{display:grid;min-height:240px;place-items:center;align-content:center;margin-top:14px;padding:24px;border:2px dashed #d0d5dd;border-radius:14px;background:#f8fafc;text-align:center}
+.empty span{color:#98a2b3;font-size:42px}.empty b{margin-top:6px}.empty p,.response p,.rules li,.rules p,.rule{color:var(--muted);font-size:12px}
+.response label{display:grid;gap:6px;margin-top:18px;font-size:12px;font-weight:800}.response textarea{width:100%;box-sizing:border-box;padding:12px;border:1px solid var(--line);border-radius:10px;background:#f8fafc;font:inherit;resize:vertical}
+.response button,.rules button{padding:10px 13px;border:0;border-radius:10px;background:var(--ink);color:#fff;font:inherit;font-size:12px;font-weight:800;opacity:.55}
+.response>button{margin-top:10px}.rules{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:16px;padding:18px}.rules h3{margin:0 0 6px;font-size:14px}.rules ul{margin:0;padding-left:18px}.rules p{margin:0 0 10px}
+.rule{margin-top:16px;padding:16px}
+@media(max-width:760px){.summary{grid-template-columns:repeat(2,minmax(0,1fr))}.review-layout,.rules{grid-template-columns:1fr}}
+@media(max-width:460px){.summary{grid-template-columns:1fr}.section-head{align-items:stretch;flex-direction:column}.section-head select{max-width:none}}
