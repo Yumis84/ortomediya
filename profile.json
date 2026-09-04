@@ -44,4 +44,22 @@
     "Подбор изделий"
   ],
   "services_status": "partial_verified_demo"
+  ,
+  "profile_management": {
+    "correction": {
+      "status": "preview_disabled",
+      "grants_ownership": false,
+      "requires_moderation": true
+    },
+    "ownership_claim": {
+      "status": "preview_disabled",
+      "verification_methods": [
+        "corporate_email",
+        "official_phone",
+        "official_website",
+        "documents_if_required"
+      ],
+      "grants_company_response_access_after_approval": true
+    }
+  }
 }
