@@ -1,1 +1,33 @@
-{"profile_id":"demo-ortomediya","page":1,"limit":20,"total":0,"next":null,"reviews":[],"status":"no_published_first_party_reviews","note":"Внешние тексты отзывов не копируются без подтверждённого разрешения правообладателя."}
+{
+  "profile_id": "demo-ortomediya",
+  "page": 1,
+  "limit": 20,
+  "total": 0,
+  "next": null,
+  "reviews": [],
+  "status": "no_published_first_party_reviews",
+  "note": "Внешние тексты отзывов не копируются без подтверждённого разрешения правообладателя.",
+  "available_filters": {
+    "sources": [
+      "Отзыв.com",
+      "2ГИС",
+      "Яндекс",
+      "Google"
+    ],
+    "ratings": [
+      5,
+      4,
+      "1-3"
+    ]
+  },
+  "review_lifecycle": [
+    "submitted",
+    "moderation",
+    "published",
+    "company_response"
+  ],
+  "actions": {
+    "company_response_requires_verified_owner": true,
+    "report_requires_moderation": true
+  }
+}
