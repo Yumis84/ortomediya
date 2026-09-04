@@ -50,5 +50,13 @@
     "profile_created_by_company": true,
     "flow": ["registration", "profile_creation", "moderation", "plan_and_payment", "publication_and_promotion"],
     "management": ["profile", "branches", "services", "reviews_and_responses", "plan_and_payments", "analytics"]
+  },
+  "media": {
+    "status": "awaiting_company_upload",
+    "published_count": 0,
+    "maximum_images": 12,
+    "source": "company_account",
+    "requires_moderation": true,
+    "slots": ["cover", "interior", "exterior", "products", "team"]
   }
 }
