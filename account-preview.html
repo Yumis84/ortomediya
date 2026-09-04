@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#101828">
+  <title>Личный кабинет компании — предпросмотр | Отзыв.com</title>
+  <link rel="icon" href="https://отзыв.com/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="account-preview.css">
+</head>
+<body>
+  <header><div class="wrap top"><a class="brand" href="https://отзыв.com/">отзыв<span>.com</span></a><b>ПРЕДПРОСМОТР ЛИЧНОГО КАБИНЕТА</b></div></header>
+  <main class="wrap">
+    <nav aria-label="Навигация кабинета"><a class="active" href="#status">Главная</a><a href="#profile">Профиль</a><a href="#reviews">Отзывы</a><a href="#billing">Тариф и оплата</a><a href="#notifications">Уведомления</a></nav>
+    <section class="intro"><div><small>КОМПАНИЯ</small><h1>Ортомедия</h1><p>Управление профилем, подпиской и видимостью сервиса.</p></div><a href="profile.html">Открыть публичный профиль ↗</a></section>
+
+    <section class="state-grid" id="status">
+      <article class="state paid">
+        <div class="state-head"><span>● Подписка активна</span><b>ОПЛАЧЕНО</b></div>
+        <h2>Профиль работает</h2>
+        <p>Публичная страница доступна, продвижение и разрешённая индексация включены.</p>
+        <dl><div><dt>Состояние страницы</dt><dd>Активна</dd></div><div><dt>Поисковая индексация</dt><dd>Разрешена</dd></div><div><dt>Данные для нейросетей</dt><dd>Доступны</dd></div><div><dt>Окончание периода</dt><dd>Показывается после подключения оплаты</dd></div></dl>
+        <button disabled>Продлить подписку</button>
+      </article>
+      <article class="state expired">
+        <div class="state-head"><span>● Подписка закончилась</span><b>НЕ ОПЛАЧЕНО</b></div>
+        <h2>Работа сервиса остановлена</h2>
+        <p>Страница сохранена по прежнему адресу, но продвижение и индексация отключены.</p>
+        <dl><div><dt>Состояние страницы</dt><dd>Доступна по ссылке</dd></div><div><dt>Поисковая индексация</dt><dd>Закрыта</dd></div><div><dt>Данные для нейросетей</dt><dd>Закрыты</dd></div><div><dt>После оплаты</dt><dd>Восстановятся автоматически</dd></div></dl>
+        <button disabled>Возобновить подписку</button>
+        <a class="compare" href="profile-inactive.html">Посмотреть профиль посетителя ↗</a>
+      </article>
+    </section>
+
+    <section class="panel" id="notifications"><div><small>УВЕДОМЛЕНИЯ</small><h2>Владелец заранее узнает об окончании</h2></div><div class="timeline"><span><b>До окончания</b>Напоминание о продлении</span><span><b>В день окончания</b>Сообщение об остановке сервиса</span><span><b>После отключения</b>Описание последствий и восстановление после оплаты</span></div></section>
+
+    <section class="cards" id="profile"><article><b>Профиль компании</b><span>Описание, контакты, услуги и филиалы</span></article><article><b>Фото и логотип</b><span>Загрузка, порядок и модерация</span></article><article id="reviews"><b>Отзывы и ответы</b><span>Новые отзывы и официальный ответ</span></article><article id="billing"><b>Тариф и документы</b><span>Статус оплаты и история операций</span></article></section>
+    <p class="demo">Это интерфейсный макет. Оплата, авторизация и отправка данных пока не подключены.</p>
+  </main>
+</body>
+</html>
