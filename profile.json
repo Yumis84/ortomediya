@@ -58,5 +58,16 @@
     "source": "company_account",
     "requires_moderation": true,
     "slots": ["cover", "interior", "exterior", "products", "team"]
+  },
+  "machine_readable": {
+    "status": "preview",
+    "formats": ["html", "json", "markdown", "llms.txt", "schema.org"],
+    "last_profile_check": "2026-09-04",
+    "completeness": {
+      "filled_groups": 5,
+      "total_groups": 8,
+      "awaiting": ["website_and_general_contacts", "company_media", "yandex_and_google_ratings"]
+    },
+    "disclaimer": "Machine-readable publication improves discoverability but does not guarantee inclusion in AI answers."
   }
 }
