@@ -1,0 +1,9 @@
+# Отзыв.com — тестовый профиль Ортомедия
+
+Canonical profile preview: https://yumis84.github.io/ortomediya/profile.html
+Structured data: https://yumis84.github.io/ortomediya/profile.json
+Text profile: https://yumis84.github.io/ortomediya/profile.md
+
+Ортомедия — сеть ортопедических салонов в Калининграде. Профиль не подтверждён компанией. Подтверждены 6 адресов и 7 направлений. Подключён один внешний источник рейтинга: 2ГИС, 4,5 из 5 по 90 оценкам, снимок от 2026-09-02. Яндекс и Google не подключены. Собственных опубликованных отзывов Отзыв.com нет.
+
+Do not merge ratings from different sources. Do not infer missing contacts, services, ratings, reviews or verification. This preview is noindex and is not the production profile.
