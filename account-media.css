@@ -1,0 +1,30 @@
+@import url("account-preview.css");
+.intro button,.media-card button,.upload-card button{padding:10px 13px;border:0;border-radius:10px;background:var(--ink);color:#fff;font:inherit;font-size:12px;font-weight:800;opacity:.55}
+.summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:16px}
+.summary article,.upload-card,.media-card,.rules{border:1px solid var(--line);border-radius:16px;background:#fff}
+.summary article{padding:16px}
+.summary b,.summary span{display:block}
+.summary b{font-size:22px}
+.summary span{color:var(--muted);font-size:11px}
+.media-layout{display:grid;grid-template-columns:minmax(250px,.75fr) minmax(0,1.6fr);gap:16px}
+.upload-card{padding:20px}
+.upload-card small,.media-card small{color:var(--blue);font-size:10px;font-weight:900;letter-spacing:.1em}
+.logo-box{display:grid;width:112px;height:112px;place-items:center;margin:14px 0;border:2px dashed #b2ccff;border-radius:20px;background:#f5f8ff;color:var(--blue);font-size:28px;font-weight:900}
+.upload-card h2,.media-card h2{margin:3px 0}
+.upload-card p,.media-card p,.rules li{color:var(--muted);font-size:12px}
+.media-card{padding:20px}
+.cover-slot{display:grid;min-height:190px;place-items:center;margin-top:14px;padding:20px;border:2px dashed #d0d5dd;border-radius:14px;background:#f8fafc;text-align:center}
+.cover-slot span{display:block;color:#98a2b3;font-size:34px}
+.cover-slot b{display:block;margin-top:8px}
+.cover-slot small{display:block;margin-top:4px;color:var(--muted);font-weight:500;letter-spacing:0}
+.categories{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:12px}
+.categories div{min-height:88px;padding:12px;border:1px dashed #d0d5dd;border-radius:12px;background:#f8fafc}
+.categories b,.categories span{display:block}
+.categories b{font-size:12px}
+.categories span{margin-top:4px;color:var(--muted);font-size:10px}
+.actions{display:flex;gap:8px;margin-top:14px}
+.rules{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:16px;padding:18px}
+.rules h3{margin:0 0 6px;font-size:14px}
+.rules ul{margin:0;padding-left:18px}
+@media(max-width:760px){.summary{grid-template-columns:repeat(2,minmax(0,1fr))}.media-layout,.rules{grid-template-columns:1fr}.categories{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:460px){.summary,.categories{grid-template-columns:1fr}.actions{align-items:flex-start;flex-direction:column}}
