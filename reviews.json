@@ -29,5 +29,20 @@
   "actions": {
     "company_response_requires_verified_owner": true,
     "report_requires_moderation": true
+  },
+  "submission_form": {
+    "status": "preview_disabled",
+    "fields": [
+      "rating",
+      "branch_id",
+      "display_name",
+      "review_text",
+      "pros",
+      "cons",
+      "rules_accepted"
+    ],
+    "requires_turnstile": true,
+    "initial_review_status": "moderation",
+    "collects_data_before_launch": false
   }
 }
