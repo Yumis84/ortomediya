@@ -1,13 +1,47 @@
 {
-  "profile_id":"demo-ortomediya",
-  "name":"Ортомедия",
-  "aliases":["Ортомедия","ООО «Ортомедия»"],
-  "location":{"city":"Калининград","country":"RU"},
-  "verification_status":"unverified",
-  "identity_status":"resolved_for_demo",
-  "reviews":{"published_count":0,"endpoint":"reviews.json"},
-  "ratings_by_source":[{"source":"2ГИС","rating":4.5,"scale":5,"rating_count":90,"review_count":44,"checked_at":"2026-09-02"}],
-  "otzovik_rating":null,
-  "ai_summary":{"status":"insufficient_permitted_reviews","claims":[]},
-  "data_status_flags":["template_preview","unverified_company_profile"]
+  "profile_id": "demo-ortomediya",
+  "name": "Ортомедия",
+  "aliases": [
+    "Ортомедия",
+    "ООО «Ортомедия»"
+  ],
+  "location": {
+    "city": "Калининград",
+    "country": "RU"
+  },
+  "verification_status": "unverified",
+  "identity_status": "resolved_for_demo",
+  "reviews": {
+    "published_count": 0,
+    "endpoint": "reviews.json"
+  },
+  "ratings_by_source": [
+    {
+      "source": "2ГИС",
+      "rating": 4.5,
+      "scale": 5,
+      "rating_count": 90,
+      "review_count": 44,
+      "checked_at": "2026-09-02"
+    }
+  ],
+  "otzovik_rating": null,
+  "ai_summary": {
+    "status": "insufficient_permitted_reviews",
+    "claims": []
+  },
+  "data_status_flags": [
+    "template_preview",
+    "unverified_company_profile"
+  ],
+  "services": [
+    "Ортопедическая обувь",
+    "Ортопедические стельки",
+    "Компрессионный трикотаж",
+    "Ортезы и бандажи",
+    "Товары для реабилитации",
+    "Трости и костыли",
+    "Подбор изделий"
+  ],
+  "services_status": "partial_verified_demo"
 }
