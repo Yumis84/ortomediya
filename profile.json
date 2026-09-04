@@ -1,10 +1,7 @@
 {
   "profile_id": "demo-ortomediya",
   "name": "Ортомедия",
-  "aliases": [
-    "Ортомедия",
-    "ООО «Ортомедия»"
-  ],
+  "aliases": ["Ортомедия", "ООО «Ортомедия»"],
   "location": {
     "city": "Калининград",
     "country": "RU"
@@ -30,10 +27,7 @@
     "status": "insufficient_permitted_reviews",
     "claims": []
   },
-  "data_status_flags": [
-    "template_preview",
-    "unverified_company_profile"
-  ],
+  "data_status_flags": ["template_preview", "unverified_company_profile"],
   "services": [
     "Ортопедическая обувь",
     "Ортопедические стельки",
@@ -43,13 +37,38 @@
     "Трости и костыли",
     "Подбор изделий"
   ],
-  "services_status": "partial_verified_demo"
-  ,
+  "services_status": "partial_verified_demo",
   "company_account": {
     "status": "preview_disabled",
     "profile_created_by_company": true,
-    "flow": ["registration", "profile_creation", "moderation", "plan_and_payment", "publication_and_promotion"],
-    "management": ["profile", "branches", "services", "reviews_and_responses", "plan_and_payments", "analytics"]
+    "flow": [
+      "registration",
+      "profile_creation",
+      "moderation",
+      "plan_and_payment",
+      "publication_and_promotion"
+    ],
+    "management": [
+      "profile",
+      "branches",
+      "services",
+      "reviews_and_responses",
+      "plan_and_payments",
+      "analytics"
+    ]
+  },
+  "subscription": {
+    "status": "active_demo",
+    "public_url_retained_after_expiry": true,
+    "expiry_effects": {
+      "public_page_available_to_humans": true,
+      "promotion_active": false,
+      "search_indexing_allowed": false,
+      "ai_crawler_indexing_allowed": false,
+      "machine_readable_exports_enabled": false
+    },
+    "notifications": ["before_expiry", "on_expiry", "after_deactivation"],
+    "reactivation": "automatic_after_successful_payment"
   },
   "media": {
     "status": "awaiting_company_upload",
@@ -66,7 +85,11 @@
     "completeness": {
       "filled_groups": 5,
       "total_groups": 8,
-      "awaiting": ["website_and_general_contacts", "company_media", "yandex_and_google_ratings"]
+      "awaiting": [
+        "website_and_general_contacts",
+        "company_media",
+        "yandex_and_google_ratings"
+      ]
     },
     "disclaimer": "Machine-readable publication improves discoverability but does not guarantee inclusion in AI answers."
   }
