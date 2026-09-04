@@ -1,7 +1,10 @@
 {
   "profile_id": "demo-ortomediya",
   "name": "Ортомедия",
-  "aliases": ["Ортомедия", "ООО «Ортомедия»"],
+  "aliases": [
+    "Ортомедия",
+    "ООО «Ортомедия»"
+  ],
   "location": {
     "city": "Калининград",
     "country": "RU"
@@ -27,7 +30,10 @@
     "status": "insufficient_permitted_reviews",
     "claims": []
   },
-  "data_status_flags": ["template_preview", "unverified_company_profile"],
+  "data_status_flags": [
+    "template_preview",
+    "unverified_company_profile"
+  ],
   "services": [
     "Ортопедическая обувь",
     "Ортопедические стельки",
@@ -67,8 +73,18 @@
       "ai_crawler_indexing_allowed": false,
       "machine_readable_exports_enabled": false
     },
-    "notifications": ["before_expiry", "on_expiry", "after_deactivation"],
-    "reactivation": "automatic_after_successful_payment"
+    "notifications": [
+      "before_expiry",
+      "on_expiry",
+      "after_deactivation"
+    ],
+    "reactivation": "automatic_after_successful_payment",
+    "public_notice": {
+      "visible_when": "inactive",
+      "visible_on_active_profile": false,
+      "title": "Профиль неактивен",
+      "message": "Продвижение и индексация профиля остановлены. Со временем страница может пропасть из поисковой выдачи и перестать учитываться нейросетями."
+    }
   },
   "media": {
     "status": "awaiting_company_upload",
@@ -76,11 +92,23 @@
     "maximum_images": 12,
     "source": "company_account",
     "requires_moderation": true,
-    "slots": ["cover", "interior", "exterior", "products", "team"]
+    "slots": [
+      "cover",
+      "interior",
+      "exterior",
+      "products",
+      "team"
+    ]
   },
   "machine_readable": {
     "status": "preview",
-    "formats": ["html", "json", "markdown", "llms.txt", "schema.org"],
+    "formats": [
+      "html",
+      "json",
+      "markdown",
+      "llms.txt",
+      "schema.org"
+    ],
     "last_profile_check": "2026-09-04",
     "completeness": {
       "filled_groups": 5,
