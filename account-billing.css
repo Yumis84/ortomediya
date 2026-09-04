@@ -1,0 +1,13 @@
+@import url("account-preview.css");
+.billing-layout{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(280px,.8fr);gap:16px}
+.plan,.visibility,.history,.rules{border:1px solid var(--line);border-radius:18px;background:#fff}.plan,.visibility,.history{padding:22px}
+.plan small,.visibility>small,.history small{color:var(--blue);font-size:10px;font-weight:900;letter-spacing:.1em}
+.plan-head,.section-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}.plan h2,.visibility h2,.history h2{margin:3px 0}.plan-head>span{padding:6px 9px;border-radius:999px;background:#fff4e5;color:#b54708;font-size:9px;font-weight:900;letter-spacing:.07em}
+.plan>p,.visibility li,.visibility p,.history p,.rules p{color:var(--muted);font-size:12px}
+dl{margin:18px 0}dl div{display:flex;justify-content:space-between;gap:16px;padding:11px 0;border-top:1px solid var(--line)}dt{color:var(--muted);font-size:12px}dd{margin:0;text-align:right;font-size:12px;font-weight:800}
+.plan button,.history button{padding:10px 13px;border:0;border-radius:10px;background:var(--ink);color:#fff;font:inherit;font-size:12px;font-weight:800;opacity:.55}.plan button{width:100%}
+.visibility ul{margin:16px 0;padding-left:20px}.visibility li{margin:7px 0}.visibility>div{margin-top:18px;padding:14px;border-radius:12px;background:#fff4e5}.visibility>div b{color:#b54708}.visibility>div p{margin:5px 0 0}
+.history{margin-top:16px}.empty{margin-top:16px;padding:24px;border:2px dashed #d0d5dd;border-radius:14px;background:#f8fafc;text-align:center}.empty p{margin:5px 0 0}
+.rules{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:16px;padding:18px}.rules h3{margin:0 0 6px;font-size:14px}.rules p{margin:0}
+@media(max-width:760px){.billing-layout,.rules{grid-template-columns:1fr}}
+@media(max-width:460px){.plan-head,.section-head{align-items:stretch;flex-direction:column}.plan-head>span{align-self:flex-start}dl div{align-items:flex-start;flex-direction:column;gap:3px}dd{text-align:left}}
