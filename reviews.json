@@ -1,12 +1,1 @@
-{
-  "profile_id":"demo-ortomediya",
-  "page":1,
-  "limit":3,
-  "total":281,
-  "next":"reviews.json?page=2&limit=3",
-  "reviews":[
-    {"review_id":"demo-r1","rating":5,"text":"Демонстрационный отзыв: внимательное отношение персонала и подробная консультация.","source":{"name":"Яндекс","source_url_note":"Демонстрационные данные"},"review_date":"2026-03-12","received_at":"2026-08-20","status":"active"},
-    {"review_id":"demo-r2","rating":4,"text":"Демонстрационный отзыв: положительно отмечено общение, но ожидание оказалось дольше ожидаемого.","source":{"name":"2ГИС","source_url_note":"Демонстрационные данные"},"review_date":"2026-02-28","received_at":"2026-08-20","status":"active"},
-    {"review_id":"demo-r3","rating":5,"text":"Демонстрационный отзыв: пользователь описывает опыт консультации и работу специалиста.","source":{"name":"Google","source_url_note":"Демонстрационные данные"},"review_date":"2026-01-05","received_at":"2026-08-20","status":"active"}
-  ]
-}
+{"profile_id":"demo-ortomediya","page":1,"limit":20,"total":0,"next":null,"reviews":[],"status":"no_published_first_party_reviews","note":"Внешние тексты отзывов не копируются без подтверждённого разрешения правообладателя."}
