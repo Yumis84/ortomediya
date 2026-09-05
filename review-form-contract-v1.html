@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="description" content="Тестовая форма собственного отзыва Отзыв.com, согласованная с контрактом Stage B v1.">
+  <title>Форма отзыва — контракт v1 | Отзыв.com</title>
+  <link rel="stylesheet" href="profile.css?v=20260904-6">
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="https://отзыв.com/">отзыв<span>.com</span></a>
+    <b class="preview">КОНТРАКТНЫЙ ПРЕДПРОСМОТР</b>
+  </div>
+</header>
+<main class="wrap" style="max-width:760px;margin:40px auto">
+  <section class="card" id="own">
+    <small class="kicker">ОТЗЫВ.COM · STAGE B</small>
+    <h1>Оставить отзыв об Ортомедии</h1>
+    <p class="muted intro">Предпросмотр формы, согласованный с submission schema v1. Отправка намеренно не подключена.</p>
+
+    <form class="review-form" aria-label="Форма отзыва v1" onsubmit="return false">
+      <fieldset>
+        <legend>Ваш отзыв</legend>
+
+        <div class="rating-field">
+          <span>Ваша оценка</span>
+          <div class="rating-choice" aria-label="Выбор оценки от 1 до 5">
+            <input type="radio" name="rating" id="rate-5" value="5"><label for="rate-5">★</label>
+            <input type="radio" name="rating" id="rate-4" value="4"><label for="rate-4">★</label>
+            <input type="radio" name="rating" id="rate-3" value="3"><label for="rate-3">★</label>
+            <input type="radio" name="rating" id="rate-2" value="2"><label for="rate-2">★</label>
+            <input type="radio" name="rating" id="rate-1" value="1"><label for="rate-1">★</label>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <label>Филиал
+            <select name="location_id">
+              <option value="">Выберите адрес посещения</option>
+              <option value="ortomediya-01">Советский проспект, 33–37</option>
+              <option value="ortomediya-02">Проспект Мира, 39</option>
+              <option value="ortomediya-03">Улица Киевская, 121В</option>
+              <option value="ortomediya-04">Пролетарская улица, 90–92</option>
+              <option value="ortomediya-05">Улица 9 Апреля, 5–7</option>
+              <option value="ortomediya-06">Летняя улица, 14</option>
+            </select>
+          </label>
+          <label>Имя или псевдоним
+            <input name="author_display_name" type="text" minlength="2" maxlength="120" placeholder="Как вас показать в отзыве">
+          </label>
+        </div>
+
+        <label>Ваш отзыв
+          <textarea name="body" rows="7" minlength="50" maxlength="5000" placeholder="Расскажите о личном опыте: что произошло и когда"></textarea>
+        </label>
+
+        <label>Email для связи с модерацией
+          <input name="author_email" type="email" maxlength="254" autocomplete="email" placeholder="Не публикуется">
+        </label>
+
+        <label class="consent">
+          <input name="experience_confirmed" type="checkbox">
+          Подтверждаю, что описываю собственный опыт взаимодействия с компанией.
+        </label>
+        <label class="consent">
+          <input name="terms_accepted" type="checkbox">
+          Принимаю правила публикации отзывов.
+        </label>
+        <label class="consent">
+          <input name="privacy_accepted" type="checkbox">
+          Соглашаюсь с обработкой персональных данных согласно политике конфиденциальности.
+        </label>
+
+        <div class="submit-row">
+          <button class="btn primary" type="button" disabled>Отправить на модерацию</button>
+          <small>На рабочем этапе здесь будет Turnstile. Токен передаётся только защищённому Worker и не попадает в публичный профиль.</small>
+        </div>
+      </fieldset>
+    </form>
+
+    <div class="note">
+      <b>Контракт v1:</b> форма содержит только поля, разрешённые schema v1. Служебные значения <code>schema_version</code>, <code>request_id</code> и данные, производные от hostname, формируются/контролируются на защищённом слое.
+    </div>
+    <div class="disabled-note">Это отдельный контрактный предпросмотр. Production API и Cloudflare пока не подключены.</div>
+  </section>
+</main>
+</body>
+</html>
