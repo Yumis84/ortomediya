@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="description" content="Прототип раздела отзывов профиля Ортомедии на Отзыв.com: форма подачи и структура опубликованного отзыва.">
+<title>Отзывы Ортомедии — прототип раздела | Отзыв.com</title>
+<link rel="stylesheet" href="profile.css?v=20260904-6">
+<style>
+.review-stage{display:grid;gap:20px;padding:38px 0 70px}.review-panel{background:#fff;border:1px solid var(--line);border-radius:20px;padding:24px}.review-panel h1{margin:6px 0 10px;font-size:clamp(32px,5vw,52px);line-height:1.05;letter-spacing:-.05em}.review-panel h2{margin:0 0 10px}.review-panel .intro{max-width:760px}.review-form{display:grid;gap:16px}.review-form fieldset{border:0;padding:0;margin:0}.review-form legend{font-weight:850;font-size:18px;margin-bottom:16px}.review-form label{display:grid;gap:6px;font-weight:750;font-size:13px;margin-bottom:14px}.review-form input,.review-form select,.review-form textarea{width:100%;border:1px solid var(--line);border-radius:11px;padding:11px 12px;font:inherit;background:#fff;color:var(--ink)}.review-form textarea{resize:vertical}.rating-field{display:flex;align-items:center;gap:18px;margin-bottom:16px}.rating-choice{display:flex;flex-direction:row-reverse;justify-content:flex-end;gap:3px}.rating-choice input{position:absolute;opacity:0}.rating-choice label{display:block;margin:0;color:#98a2b3;font-size:27px;line-height:1;cursor:default}.rating-choice input:checked~label{color:var(--amber)}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.consent{display:flex!important;grid-template-columns:auto 1fr!important;align-items:start;gap:9px!important;font-weight:600!important}.consent input{width:auto;margin-top:3px}.submit-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.submit-row small{color:var(--muted)}.disabled-note{margin-top:0}.published-list{display:grid;gap:16px}.published-empty{padding:28px 18px;text-align:center;border:1px dashed #d0d5dd;border-radius:16px;background:var(--soft)}.published-empty strong{display:block;font-size:18px;margin-bottom:5px}.review-card{border:1px solid var(--line);border-radius:16px;padding:20px}.review-card header{border:0;background:transparent;min-height:0;padding:0}.review-meta{display:flex;align-items:center;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:13px}.review-author{font-weight:850;color:var(--ink);font-size:17px}.review-rating{font-weight:750}.review-body{font-size:16px;margin-top:15px}.review-provenance{margin-top:18px;padding-top:14px;border-top:1px solid var(--line);color:var(--muted);font-size:12px}.review-provenance dl{margin:0;display:grid;grid-template-columns:max-content 1fr;gap:4px 10px}.review-provenance dt{font-weight:750}.review-provenance dd{margin:0}.rules-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.rule{border:1px solid var(--line);border-radius:14px;padding:14px;background:var(--soft)}.rule b{display:block;margin-bottom:5px}.rule p{margin:0;color:var(--muted);font-size:12px}@media(max-width:650px){.form-grid,.rules-grid{grid-template-columns:1fr}.review-panel{padding:18px}.rating-field{align-items:flex-start;flex-direction:column;gap:8px}}
+</style>
+</head>
+<body>
+<header><div class="wrap nav"><a class="brand" href="https://отзыв.com/">отзыв<span>.com</span></a><a class="back" href="profile.html">← Вернуться в профиль</a></div></header>
+<main class="wrap review-stage">
+<section class="review-panel">
+<small class="kicker">ОТЗЫВ.COM · ПРОТОТИП РАЗДЕЛА</small>
+<h1>Отзывы об Ортомедии</h1>
+<p class="muted intro">Здесь собраны две части будущего рабочего раздела: безопасная форма подачи и каноническая структура опубликованных отзывов. Реальные отзывы в прототип не подставляются.</p>
+</section>
+
+<section class="review-panel" id="submit-review">
+<small class="kicker">ПОДАЧА</small>
+<h2>Оставить отзыв</h2>
+<p class="muted intro">Форма согласована с submission schema v1. До подключения защищённого API отправка отключена.</p>
+<form class="review-form" aria-label="Форма собственного отзыва v1" onsubmit="return false">
+<fieldset>
+<legend>Ваш отзыв</legend>
+<div class="rating-field"><span>Ваша оценка</span><div class="rating-choice" aria-label="Выбор оценки от 1 до 5"><input type="radio" name="rating" id="r5" value="5"><label for="r5">★</label><input type="radio" name="rating" id="r4" value="4"><label for="r4">★</label><input type="radio" name="rating" id="r3" value="3"><label for="r3">★</label><input type="radio" name="rating" id="r2" value="2"><label for="r2">★</label><input type="radio" name="rating" id="r1" value="1"><label for="r1">★</label></div></div>
+<div class="form-grid"><label>Филиал<select name="location_id"><option value="">Выберите адрес посещения</option><option value="ortomediya-01">Советский проспект, 33–37</option><option value="ortomediya-02">Проспект Мира, 39</option><option value="ortomediya-03">Улица Киевская, 121В</option><option value="ortomediya-04">Пролетарская улица, 90–92</option><option value="ortomediya-05">Улица 9 Апреля, 5–7</option><option value="ortomediya-06">Летняя улица, 14</option></select></label><label>Имя или псевдоним<input name="author_display_name" type="text" minlength="2" maxlength="120" placeholder="Как вас показать в отзыве"></label></div>
+<label>Ваш отзыв<textarea name="body" rows="7" minlength="50" maxlength="5000" placeholder="Расскажите о личном опыте: что произошло и когда"></textarea></label>
+<label>Email для связи с модерацией<input name="author_email" type="email" maxlength="254" autocomplete="email" placeholder="Не публикуется"></label>
+<label class="consent"><input name="experience_confirmed" type="checkbox"> <span>Подтверждаю, что описываю собственный опыт взаимодействия с компанией.</span></label>
+<label class="consent"><input name="terms_accepted" type="checkbox"> <span>Принимаю правила публикации отзывов.</span></label>
+<label class="consent"><input name="privacy_accepted" type="checkbox"> <span>Соглашаюсь с обработкой персональных данных согласно политике конфиденциальности.</span></label>
+<div class="submit-row"><button class="btn primary" type="button" disabled>Отправить на модерацию</button><small>После запуска защита Turnstile и служебные поля формируются на защищённом слое.</small></div>
+</fieldset>
+</form>
+<div class="disabled-note">Production API и Cloudflare не подключены. Эта страница не принимает и не сохраняет отправленные данные.</div>
+</section>
+
+<section class="review-panel" id="published-reviews">
+<small class="kicker">ПУБЛИКАЦИЯ</small>
+<h2>Опубликованные отзывы</h2>
+<p class="muted intro">В рабочем профиле здесь будет единый список опубликованных отзывов. Внешний источник указывается как provenance и не создаёт отдельного «рейтинга Отзыв.com».</p>
+<div class="published-list">
+<div class="published-empty"><strong>Пока нет опубликованных отзывов</strong><span class="muted">Черновики и отзывы «На модерации» не попадают в публичный HTML.</span></div>
+<article class="review-card" id="review-template" data-review-id="REPLACE_WITH_STABLE_REVIEW_ID" hidden>
+<header><div class="review-meta"><span class="review-author">Имя или псевдоним</span><span class="review-rating" aria-label="Оценка: N из 5">Оценка: N из 5</span><time datetime="YYYY-MM-DD">Дата публикации</time></div></header>
+<div class="review-body"><p>Разрешённый полный текст опубликованного отзыва.</p></div>
+<footer class="review-provenance"><dl><dt>Компания</dt><dd>Ортомедия</dd><dt>Источник</dt><dd>Отзыв.com</dd><dt>Идентификатор</dt><dd>REPLACE_WITH_STABLE_REVIEW_ID</dd><dt>Филиал</dt><dd>Только если подтверждён данными подачи</dd></dl></footer>
+</article>
+</div>
+</section>
+
+<section class="review-panel">
+<small class="kicker">КОНТРАКТ ПУБЛИКАЦИИ</small>
+<h2>Что робот и AI-агент должны получить из HTML</h2>
+<div class="rules-grid"><div class="rule"><b>Текст</b><p>Полный разрешённый текст находится непосредственно в HTML, без обязательного JavaScript.</p></div><div class="rule"><b>Факты</b><p>Автор, оценка, дата, компания и подтверждённый филиал имеют явные семантические элементы.</p></div><div class="rule"><b>Происхождение</b><p>Стабильный Review ID и источник сохраняются в карточке; JSON-LD дополняет HTML, но не заменяет его.</p></div></div>
+</section>
+</main>
+</body>
+</html>
