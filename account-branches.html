@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="robots" content="noindex,nofollow">
   <meta name="theme-color" content="#101828">
-  <title>Филиалы компании — предпросмотр | Отзыв.com</title>
+  <title>Филиалы компании — кабинет | Отзыв.com</title>
   <link rel="icon" href="https://отзыв.com/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="account-branches.css">
 </head>
@@ -13,18 +13,60 @@
   <header><div class="wrap top"><a class="brand" href="https://отзыв.com/">отзыв<span>.com</span></a><b>ПРЕДПРОСМОТР ЛИЧНОГО КАБИНЕТА</b></div></header>
   <main class="wrap">
     <nav aria-label="Навигация кабинета"><a href="account-preview.html">Главная</a><a href="account-profile.html">Профиль</a><a class="active" href="#branches">Филиалы</a><a href="account-services.html">Услуги</a><a href="account-media.html">Фото</a><a href="account-reviews.html">Отзывы</a><a href="account-billing.html">Тариф и оплата</a><a href="account-notifications.html">Уведомления</a><a href="account-analytics.html">Статистика</a></nav>
-    <section class="intro"><div><small>УПРАВЛЕНИЕ ФИЛИАЛАМИ</small><h1>6 адресов</h1><p>Контакты и расписание каждого филиала публикуются отдельно.</p></div><button disabled>Добавить филиал</button></section>
-    <section class="summary"><article><b>6</b><span>адресов в профиле</span></article><article><b>6</b><span>телефонов указано</span></article><article class="warn"><b>5</b><span>расписаний нужно уточнить</span></article><article><b>04.09.2026</b><span>последняя проверка</span></article></section>
+    <section class="intro"><div><small>УПРАВЛЕНИЕ ФИЛИАЛАМИ</small><h1 id="branch-title">Филиалы</h1><p>Показываем только опубликованные данные профиля. Редактирование подключим после авторизации владельца.</p></div><button disabled>Добавить филиал</button></section>
+    <section class="summary"><article><b id="branch-count">—</b><span>адресов в профиле</span></article><article><b id="phone-count">—</b><span>телефонов указано</span></article><article class="warn"><b id="hours-missing">—</b><span>расписаний нужно уточнить</span></article><article><b id="data-state">Загрузка</b><span>состояние данных</span></article></section>
     <section class="branch-list" id="branches">
-      <article><span class="num">01</span><div><h2>Советский проспект, 33–37</h2><p>Центральный район · 1 этаж</p><dl><div><dt>Телефон</dt><dd>+7 (4012) 21-59-77</dd></div><div><dt>Часы</dt><dd>08:30–20:00</dd></div></dl></div><em class="complete">Данные заполнены</em><button disabled>Редактировать</button></article>
-      <article><span class="num">02</span><div><h2>Проспект Мира, 39</h2><p>Центральный район</p><dl><div><dt>Телефон</dt><dd>+7 (4012) 50-85-86</dd></div><div><dt>Часы</dt><dd>Не указаны</dd></div></dl></div><em>Нужно расписание</em><button disabled>Редактировать</button></article>
-      <article><span class="num">03</span><div><h2>Улица Киевская, 121В</h2><p>Московский район</p><dl><div><dt>Телефон</dt><dd>+7 (4012) 75-10-14</dd></div><div><dt>Часы</dt><dd>Не указаны</dd></div></dl></div><em>Нужно расписание</em><button disabled>Редактировать</button></article>
-      <article><span class="num">04</span><div><h2>Пролетарская улица, 90–92</h2><p>Ленинградский район</p><dl><div><dt>Телефон</dt><dd>+7 (4012) 30-31-28</dd></div><div><dt>Часы</dt><dd>Не указаны</dd></div></dl></div><em>Нужно расписание</em><button disabled>Редактировать</button></article>
-      <article><span class="num">05</span><div><h2>Улица 9 Апреля, 5–7</h2><p>Ленинградский район</p><dl><div><dt>Телефон</dt><dd>+7 (4012) 70-80-17</dd></div><div><dt>Часы</dt><dd>Не указаны</dd></div></dl></div><em>Нужно расписание</em><button disabled>Редактировать</button></article>
-      <article><span class="num">06</span><div><h2>Летняя улица, 14</h2><p>Московский район · ЖК «Летний сквер»</p><dl><div><dt>Телефон</dt><dd>+7 (4012) 70-80-74</dd></div><div><dt>Часы</dt><dd>Не указаны</dd></div></dl></div><em>Нужно расписание</em><button disabled>Редактировать</button></article>
+      <article id="branches-loading"><span class="num">—</span><div><h2>Загрузка филиалов…</h2><p>Получаем актуальные данные публичного профиля.</p></div><em>Проверка данных</em><button disabled>Редактировать</button></article>
     </section>
     <div class="rule"><b>Правило публикации:</b> новое или изменённое отделение сначала сохраняется как черновик и проходит проверку. Удаление филиала из кабинета не должно стирать историю изменений.</div>
-    <p class="demo">Это интерфейсный макет. Кнопки отключены, данные не изменяются.</p>
+    <p class="demo" id="data-note">Данные загружаются из публичного профиля. Изменение данных пока отключено.</p>
   </main>
+<script>
+(async()=>{
+  const endpoint='https://rzhlcszqtuhkhfibygnk.supabase.co/rest/v1/rpc/get_public_company_profile_v2';
+  const key='sb_publishable_yhqWJ1eWUznBkqKwPogTrw_xCdCbFA-';
+  const esc=v=>String(v??'').replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[c]));
+  const el=id=>document.getElementById(id);
+  const text=(id,v)=>{if(el(id))el(id).textContent=v};
+  const value=(obj,keys)=>{for(const k of keys){if(obj&&obj[k]!==null&&obj[k]!==undefined&&String(obj[k]).trim()!=='')return obj[k]}return null};
+  const formatHours=location=>value(location,['hours','opening_hours','working_hours','schedule','openingHours']);
+  const formatPhone=location=>value(location,['phone','phone_number','telephone']);
+  const formatAddress=location=>value(location,['address','full_address','formatted_address','address_line']);
+  const formatDistrict=location=>value(location,['district','area','neighborhood']);
+  try{
+    const res=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json','apikey':key,'Authorization':'Bearer '+key},body:JSON.stringify({p_slug:'ortomediya'})});
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    const data=await res.json();
+    if(!data)throw new Error('Профиль не найден');
+    const locations=Array.isArray(data.locations)?data.locations:[];
+    const phones=locations.filter(x=>formatPhone(x)).length;
+    const missingHours=locations.filter(x=>!formatHours(x)).length;
+    text('branch-title',locations.length+' '+(locations.length===1?'адрес':locations.length<5?'адреса':'адресов'));
+    text('branch-count',locations.length);
+    text('phone-count',phones);
+    text('hours-missing',missingHours);
+    text('data-state','Актуально');
+    if(!locations.length){
+      el('branches').innerHTML='<article><span class="num">—</span><div><h2>Филиалы не опубликованы</h2><p>В публичном профиле сейчас нет опубликованных адресов.</p></div><em>Нет данных</em><button disabled>Редактировать</button></article>';
+      text('data-note','Публичный профиль не содержит опубликованных филиалов. Изменение данных пока отключено.');
+      return;
+    }
+    el('branches').innerHTML=locations.map((location,i)=>{
+      const address=formatAddress(location)||'Адрес не указан';
+      const district=formatDistrict(location);
+      const phone=formatPhone(location);
+      const hours=formatHours(location);
+      const meta=[district,value(location,['floor','unit'])].filter(Boolean).join(' · ');
+      return '<article><span class="num">'+String(i+1).padStart(2,'0')+'</span><div><h2>'+esc(address)+'</h2><p>'+esc(meta||data.city||'Город не указан')+'</p><dl><div><dt>Телефон</dt><dd>'+esc(phone||'Не указан')+'</dd></div><div><dt>Часы</dt><dd>'+esc(hours||'Не указаны')+'</dd></div></dl></div><em class="'+(hours?'complete':'')+'">'+(hours?'Данные заполнены':'Нужно расписание')+'</em><button disabled>Редактировать</button></article>';
+    }).join('');
+    text('data-note','Данные получены из публичного профиля · изменение данных пока отключено.');
+  }catch(e){
+    text('branch-title','Филиалы');
+    text('branch-count','—'); text('phone-count','—'); text('hours-missing','—'); text('data-state','Ошибка');
+    el('branches').innerHTML='<article><span class="num">—</span><div><h2>Не удалось загрузить филиалы</h2><p>Публичный профиль временно недоступен. Попробуйте открыть страницу позже.</p></div><em>Данные недоступны</em><button disabled>Редактировать</button></article>';
+    text('data-note','Не удалось получить данные публичного профиля · интерфейс остаётся доступным.');
+  }
+})();
+</script>
 </body>
 </html>
