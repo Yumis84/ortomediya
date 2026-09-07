@@ -11,9 +11,37 @@
 <header class="site-header"><a class="brand" href="index.html">отзыв<span>.com</span></a><nav><a href="#how">Как это работает</a><a href="#principles">Принципы</a><a href="profile.html">Профиль</a></nav><a class="button small" href="account-preview.html">Личный кабинет</a></header>
 <main>
 <section class="hero wrap"><div class="eyebrow">ОРТОМЕДИЯ · ТЕСТОВАЯ СРЕДА</div><h1>Профиль компании и кабинет в одном интерфейсе.</h1><p class="lead">Здесь мы собираем рабочую модель страницы компании: проверяемые данные, филиалы, услуги, отзывы и отдельный интерфейс управления профилем.</p><div class="actions"><a class="button" href="profile.html">Открыть профиль Ортомедии</a><a class="button ghost" href="account-preview.html">Открыть личный кабинет</a></div></section>
-<section class="example wrap"><div class="section-head"><div><span class="kicker">ПРОФИЛЬ</span><h2>Публичная часть</h2></div><a href="profile.html">Открыть профиль →</a></div><div class="profile-preview"><div><div class="status">НЕЗАВИСИМЫЙ ПРОФИЛЬ</div><h3>Ортомедия</h3><p>Калининград · ортопедические товары</p><div class="chips"><span>2ГИС · 4,5</span><span>90 оценок</span><span>6 филиалов</span></div></div><div class="summary-preview"><span class="ai">AI / ДАННЫЕ</span><p>Рейтинги источников показываются отдельно. Собственные отзывы не смешиваются с внешними оценками.</p><small>Тестовая среда · данные подключаются по мере готовности</small></div></div></section>
+<section class="example wrap"><div class="section-head"><div><span class="kicker">ПРОФИЛЬ</span><h2>Публичная часть</h2></div><a href="profile.html">Открыть профиль →</a></div><div class="profile-preview"><div><div class="status">НЕЗАВИСИМЫЙ ПРОФИЛЬ</div><h3 id="company-name">Ортомедия</h3><p id="company-location">Загрузка данных компании…</p><div class="chips"><span id="source-rating">Рейтинг источника…</span><span id="rating-count">Оценки…</span><span id="location-count">Филиалы…</span><span id="service-count">Услуги…</span></div></div><div class="summary-preview"><span class="ai">AI / ДАННЫЕ</span><p>Рейтинги источников показываются отдельно. Собственные отзывы не смешиваются с внешними оценками.</p><small id="data-status">Подключение к публичному профилю…</small></div></div></section>
 <section id="how" class="wrap section"><span class="kicker">КАК ЭТО РАБОТАЕТ</span><div class="steps"><article><b>01</b><h3>Профиль</h3><p>Компания получает отдельную публичную страницу с проверяемыми сведениями.</p></article><article><b>02</b><h3>Данные</h3><p>Филиалы, услуги и источники хранятся раздельно и не смешиваются в один рейтинг.</p></article><article><b>03</b><h3>Отзывы</h3><p>Собственные отзывы проходят отдельный поток модерации и публикации.</p></article><article><b>04</b><h3>Кабинет</h3><p>Компания управляет профилем, филиалами, услугами, медиа и отзывами из единого интерфейса.</p></article></div></section>
 <section id="principles" class="wrap section principles"><span class="kicker">ПРИНЦИПЫ</span><h2>Не создаём ложную уверенность.</h2><div class="principle-grid"><div>Один список отзывов</div><div>Источник — атрибут отзыва</div><div>AI Summary отделён от отзывов</div><div>Нет общего рейтинга без методологии</div></div></section>
-<section class="cta wrap"><h2>Работаем над кабинетом Ортомедии</h2><p>Следующий слой — постепенно заменить интерфейсный макет реальными данными и действиями, сохранив текущую структуру страниц.</p><a class="button" href="account-preview.html">Перейти в кабинет</a></section>
+<section class="cta wrap"><h2>Следующий слой — рабочий кабинет</h2><p>Публичная часть уже умеет получать базовые данные профиля. Дальше подключаем те же данные к разделам кабинета, а затем — авторизацию и реальные действия владельца.</p><a class="button" href="account-preview.html">Перейти в кабинет</a></section>
 </main><footer><div class="wrap footer-inner"><a class="brand" href="index.html">отзыв<span>.com</span></a><div><a href="profile.html">Профиль</a><a href="account-preview.html">Личный кабинет</a></div></div></footer>
+<script>
+(async()=>{
+  const endpoint='https://rzhlcszqtuhkhfibygnk.supabase.co/rest/v1/rpc/get_public_company_profile_v2';
+  const key='sb_publishable_yhqWJ1eWUznBkqKwPogTrw_xCdCbFA-';
+  const set=(id,text)=>{const el=document.getElementById(id);if(el)el.textContent=text};
+  try{
+    const res=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json','apikey':key,'Authorization':'Bearer '+key},body:JSON.stringify({p_slug:'ortomediya'})});
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    const data=await res.json();
+    if(!data)throw new Error('Профиль не найден');
+    const locations=Array.isArray(data.locations)?data.locations:[];
+    const services=Array.isArray(data.services)?data.services:[];
+    const sources=Array.isArray(data.sources)?data.sources:[];
+    const source=sources.find(s=>s.latest_rating)||sources[0];
+    const rating=source&&source.latest_rating?source.latest_rating:null;
+    set('company-name',data.name||'Ортомедия');
+    set('company-location',data.city||'Город не указан');
+    set('location-count',locations.length+' филиалов');
+    set('service-count',services.length+' услуг');
+    set('source-rating',rating?(source.name+' · '+Number(rating.rating).toFixed(1)):'Рейтинг источника не подключён');
+    set('rating-count',rating?(Number(rating.rating_count||0).toLocaleString('ru-RU')+' оценок'):'Оценки не подключены');
+    set('data-status','Данные получены из публичного профиля · обновление по мере изменения источника');
+  }catch(e){
+    set('company-location','Данные временно недоступны');
+    set('data-status','Не удалось получить данные профиля · интерфейс остаётся доступным');
+  }
+})();
+</script>
 </body></html>
