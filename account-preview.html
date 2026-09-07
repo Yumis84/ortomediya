@@ -13,30 +13,61 @@
   <header><div class="wrap top"><a class="brand" href="https://отзыв.com/">отзыв<span>.com</span></a><b>ПРЕДПРОСМОТР ЛИЧНОГО КАБИНЕТА</b></div></header>
   <main class="wrap">
     <nav aria-label="Навигация кабинета"><a class="active" href="#status">Главная</a><a href="account-profile.html">Профиль</a><a href="account-branches.html">Филиалы</a><a href="account-services.html">Услуги</a><a href="account-media.html">Фото</a><a href="account-reviews.html">Отзывы</a><a href="account-billing.html">Тариф и оплата</a><a href="account-notifications.html">Уведомления</a><a href="account-analytics.html">Статистика</a></nav>
-    <section class="intro"><div><small>КОМПАНИЯ</small><h1>Ортомедия</h1><p>Управление профилем, подпиской и видимостью сервиса.</p></div><a href="profile.html">Открыть публичный профиль ↗</a></section>
+    <section class="intro"><div><small>КОМПАНИЯ</small><h1 id="company-name">Ортомедия</h1><p>Управление профилем, подпиской и видимостью сервиса.</p></div><a href="profile.html">Открыть публичный профиль ↗</a></section>
 
     <section class="state-grid" id="status">
       <article class="state paid">
-        <div class="state-head"><span>● Подписка активна</span><b>ОПЛАЧЕНО</b></div>
-        <h2>Профиль работает</h2>
-        <p>Публичная страница доступна, продвижение и разрешённая индексация включены.</p>
-        <dl><div><dt>Состояние страницы</dt><dd>Активна</dd></div><div><dt>Поисковая индексация</dt><dd>Разрешена</dd></div><div><dt>Данные для нейросетей</dt><dd>Доступны</dd></div><div><dt>Окончание периода</dt><dd>Показывается после подключения оплаты</dd></div></dl>
-        <button disabled>Продлить подписку</button>
+        <div class="state-head"><span>● Публичный профиль</span><b id="profile-state">ЗАГРУЗКА</b></div>
+        <h2>Данные профиля подключены</h2>
+        <p>Кабинет уже использует публичный слой данных. Управляющие действия будут подключаться отдельным этапом после авторизации.</p>
+        <dl><div><dt>Состояние страницы</dt><dd id="profile-status">Загрузка…</dd></div><div><dt>Город</dt><dd id="company-city">Загрузка…</dd></div><div><dt>Филиалы</dt><dd id="locations-count">Загрузка…</dd></div><div><dt>Услуги</dt><dd id="services-count">Загрузка…</dd></div></dl>
+        <button disabled>Продолжить управление</button>
       </article>
       <article class="state expired">
-        <div class="state-head"><span>● Подписка закончилась</span><b>НЕ ОПЛАЧЕНО</b></div>
-        <h2>Работа сервиса остановлена</h2>
-        <p>Страница сохранена по прежнему адресу, но продвижение и индексация отключены.</p>
-        <dl><div><dt>Состояние страницы</dt><dd>Доступна по ссылке</dd></div><div><dt>Поисковая индексация</dt><dd>Закрыта</dd></div><div><dt>Данные для нейросетей</dt><dd>Закрыты</dd></div><div><dt>После оплаты</dt><dd>Восстановятся автоматически</dd></div></dl>
-        <button disabled>Возобновить подписку</button>
-        <a class="compare" href="profile-inactive.html">Посмотреть профиль посетителя ↗</a>
+        <div class="state-head"><span>● Следующий этап</span><b>В РАЗРАБОТКЕ</b></div>
+        <h2>Авторизация владельца</h2>
+        <p>После подключения входа здесь появятся персональные данные владельца, подписка, платежи и доступные действия.</p>
+        <dl><div><dt>Авторизация</dt><dd>Не подключена</dd></div><div><dt>Изменение профиля</dt><dd>Не подключено</dd></div><div><dt>Оплата</dt><dd>Не подключена</dd></div><div><dt>Уведомления</dt><dd>Интерфейс подготовлен</dd></div></dl>
+        <button disabled>Войти в кабинет</button>
       </article>
     </section>
 
-    <section class="panel" id="notifications"><div><small>УВЕДОМЛЕНИЯ</small><h2>Владелец заранее узнает об окончании</h2></div><div class="timeline"><span><b>До окончания</b>Напоминание о продлении</span><span><b>В день окончания</b>Сообщение об остановке сервиса</span><span><b>После отключения</b>Описание последствий и восстановление после оплаты</span></div></section>
+    <section class="panel" id="notifications"><div><small>СОСТОЯНИЕ РАЗРАБОТКИ</small><h2>Сначала реальные данные, затем действия</h2></div><div class="timeline"><span><b>01 · Сейчас</b>Публичные данные компании подключены к интерфейсу.</span><span><b>02 · Далее</b>Подключаем авторизацию и проверку членства компании.</span><span><b>03 · После</b>Открываем безопасные изменения профиля и работу с подпиской.</span></div></section>
 
-    <section class="cards" id="profile"><article><b>Профиль компании</b><span>Описание, контакты, услуги и филиалы</span></article><article><b>Фото и логотип</b><span>Загрузка, порядок и модерация</span></article><article id="reviews"><b>Отзывы и ответы</b><span>Новые отзывы и официальный ответ</span><a class="card-link" href="account-reviews.html">Управлять отзывами</a></article><article id="billing"><b>Тариф и документы</b><span>Статус оплаты и история операций</span><a class="card-link" href="account-billing.html">Открыть оплату</a></article></section>
-    <p class="demo">Это интерфейсный макет. Оплата, авторизация и отправка данных пока не подключены.</p>
+    <section class="cards" id="profile"><article><b>Профиль компании</b><span>Описание, контакты, услуги и филиалы</span><a class="card-link" href="account-profile.html">Открыть профиль</a></article><article><b>Филиалы и услуги</b><span><strong id="locations-card">—</strong> филиалов · <strong id="services-card">—</strong> услуг</span><a class="card-link" href="account-branches.html">Открыть филиалы</a></article><article id="reviews"><b>Отзывы и ответы</b><span>Собственные отзывы и официальный ответ</span><a class="card-link" href="account-reviews.html">Управлять отзывами</a></article><article id="billing"><b>Тариф и документы</b><span>Раздел подготовлен для подключения оплаты</span><a class="card-link" href="account-billing.html">Открыть раздел</a></article></section>
+    <p class="demo">Это интерфейсный макет. Авторизация, изменение данных и оплата пока не подключены. Показатели профиля загружаются из публичного слоя данных.</p>
   </main>
+  <script>
+    const SUPABASE_URL='https://rzhlcszqtuhkhfibygnk.supabase.co';
+    const SUPABASE_KEY='sb_publishable_yhqWJ1eWUznBkqKwPogTrw_xCdCbFA-';
+    const set=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value};
+    async function loadCompany(){
+      try{
+        const r=await fetch(SUPABASE_URL+'/rest/v1/rpc/get_public_company_profile_v2',{method:'POST',headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY},body:JSON.stringify({p_slug:'ortomediya'})});
+        if(!r.ok)throw new Error('HTTP '+r.status);
+        const d=await r.json();
+        if(!d)throw new Error('Компания не найдена');
+        const locations=Array.isArray(d.locations)?d.locations:[];
+        const services=Array.isArray(d.services)?d.services:[];
+        set('company-name',d.name||'Ортомедия');
+        set('profile-status',d.profile_status||'Не указан');
+        set('profile-state',(d.profile_status||'').toUpperCase()||'ГОТОВ');
+        set('company-city',d.city||'Не указан');
+        set('locations-count',locations.length+' '+(locations.length===1?'филиал':'филиалов'));
+        set('services-count',services.length+' '+(services.length===1?'услуга':'услуг'));
+        set('locations-card',locations.length);
+        set('services-card',services.length);
+      }catch(e){
+        set('profile-state','ОШИБКА');
+        set('profile-status','Данные временно недоступны');
+        set('company-city','—');
+        set('locations-count','—');
+        set('services-count','—');
+        set('locations-card','—');
+        set('services-card','—');
+      }
+    }
+    loadCompany();
+  </script>
 </body>
 </html>
