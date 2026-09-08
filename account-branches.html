@@ -13,13 +13,13 @@
   <header><div class="wrap top"><a class="brand" href="https://отзыв.com/">отзыв<span>.com</span></a><b>ПРЕДПРОСМОТР ЛИЧНОГО КАБИНЕТА</b></div></header>
   <main class="wrap">
     <nav aria-label="Навигация кабинета"><a href="account-preview.html">Главная</a><a href="account-profile.html">Профиль</a><a class="active" href="#branches">Филиалы</a><a href="account-services.html">Услуги</a><a href="account-media.html">Фото</a><a href="account-reviews.html">Отзывы</a><a href="account-billing.html">Тариф и оплата</a><a href="account-ai-assistant.html">AI-ассистент</a><a href="account-notifications.html">Уведомления</a><a href="account-analytics.html">Статистика</a></nav>
-    <section class="intro"><div><small>УПРАВЛЕНИЕ ФИЛИАЛАМИ</small><h1 id="branch-title">Филиалы</h1><p>Добавьте адрес, телефон и расписание филиала.</p></div></section><form id="branch-form" style="background:#fff;border:1px solid #e4e7ec;border-radius:18px;padding:20px;margin:20px 0"><h2>Добавить филиал</h2><input id="new-name" required placeholder="Название филиала" style="display:block;width:100%;padding:12px;margin:8px 0"><input id="new-address" required placeholder="Адрес" style="display:block;width:100%;padding:12px;margin:8px 0"><input id="new-city" required value="Калининград" placeholder="Город" style="display:block;width:100%;padding:12px;margin:8px 0"><input id="new-phone" placeholder="Телефон" style="display:block;width:100%;padding:12px;margin:8px 0"><input id="new-hours" placeholder="Расписание, например пн–пт 09:00–18:00" style="display:block;width:100%;padding:12px;margin:8px 0"><button type="submit">Сохранить филиал</button><p id="branch-save-state" role="status"></p></form>
+    <section class="intro"><div><small>УПРАВЛЕНИЕ ФИЛИАЛАМИ</small><h1 id="branch-title">Филиалы</h1><p>Добавьте адрес, телефон и расписание филиала.</p></div></section><form id="branch-form" style="background:#fff;border:1px solid #e4e7ec;border-radius:18px;padding:20px;margin:20px 0"><h2>Добавить филиал</h2><input id="new-name" required placeholder="Название филиала" style="display:block;width:100%;padding:12px;margin:8px 0"><input id="new-address" required placeholder="Адрес" style="display:block;width:100%;padding:12px;margin:8px 0"><input id="new-city" required placeholder="Город" style="display:block;width:100%;padding:12px;margin:8px 0"><input id="new-phone" placeholder="Телефон" style="display:block;width:100%;padding:12px;margin:8px 0"><input id="new-hours" placeholder="Расписание, например пн–пт 09:00–18:00" style="display:block;width:100%;padding:12px;margin:8px 0"><button type="submit">Сохранить филиал</button><p id="branch-save-state" role="status"></p></form>
     <section class="summary"><article><b id="branch-count">—</b><span>адресов в профиле</span></article><article><b id="phone-count">—</b><span>телефонов указано</span></article><article class="warn"><b id="hours-missing">—</b><span>расписаний нужно уточнить</span></article><article><b id="data-state">Загрузка</b><span>состояние данных</span></article></section>
     <section class="branch-list" id="branches">
       <article id="branches-loading"><span class="num">—</span><div><h2>Загрузка филиалов…</h2><p>Получаем актуальные данные публичного профиля.</p></div><em>Проверка данных</em><button disabled>Редактировать</button></article>
     </section>
-    <div class="rule"><b>Правило публикации:</b> новое или изменённое отделение сначала сохраняется как черновик и проходит проверку. Удаление филиала из кабинета не должно стирать историю изменений.</div>
-    <p class="demo" id="data-note">Данные загружаются из публичного профиля. Изменение данных пока отключено.</p>
+    <div class="rule"><b>Сохранение:</b> филиал публикуется после защищённой проверки прав владельца. Изменение фиксируется в журнале, а данные сразу появляются в профиле.</div>
+    <p class="demo" id="data-note">Загружаем филиалы выбранной компании.</p>
   </main>
 <script type="module">
 const requestedCompanyId=new URLSearchParams(location.search).get('company_id');const pickCompanyRow=rows=>(rows||[]).find(row=>row?.company?.id===requestedCompanyId||row?.company_id===requestedCompanyId)||rows?.[0];const keepCompanyContext=()=>{if(!requestedCompanyId)return;document.querySelectorAll('a[href^="account-"]').forEach(a=>{const u=new URL(a.getAttribute('href'),location.href);u.searchParams.set('company_id',requestedCompanyId);a.href=u.pathname.split('/').pop()+u.search})};keepCompanyContext();
@@ -76,9 +76,59 @@ import{createClient}from'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.11
 })();
 </script>
 <script type="module">
-const requestedCompanyId=new URLSearchParams(location.search).get('company_id');const pickCompanyRow=rows=>(rows||[]).find(row=>row?.company?.id===requestedCompanyId||row?.company_id===requestedCompanyId)||rows?.[0];const keepCompanyContext=()=>{if(!requestedCompanyId)return;document.querySelectorAll('a[href^="account-"]').forEach(a=>{const u=new URL(a.getAttribute('href'),location.href);u.searchParams.set('company_id',requestedCompanyId);a.href=u.pathname.split('/').pop()+u.search})};keepCompanyContext();
+const requestedCompanyId=new URLSearchParams(location.search).get('company_id');
+const pickCompanyRow=rows=>(rows||[]).find(row=>row?.company?.id===requestedCompanyId||row?.company_id===requestedCompanyId)||rows?.[0];
+const keepCompanyContext=()=>{if(!requestedCompanyId)return;document.querySelectorAll('a[href^="account-"]').forEach(a=>{const u=new URL(a.getAttribute('href'),location.href);u.searchParams.set('company_id',requestedCompanyId);a.href=u.pathname.split('/').pop()+u.search})};
+keepCompanyContext();
 import{createClient}from'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.115.0/+esm';
 const sb=createClient('https://rzhlcszqtuhkhfibygnk.supabase.co','sb_publishable_yhqWJ1eWUznBkqKwPogTrw_xCdCbFA-');
-document.getElementById('branch-form').addEventListener('submit',async e=>{e.preventDefault();const state=document.getElementById('branch-save-state');const btn=e.target.querySelector('button');btn.disabled=true;state.textContent='Сохраняем…';try{const s=await sb.auth.getSession();if(!s.data.session)throw new Error('Сначала войдите в личный кабинет.');const r=await sb.rpc('get_my_companies');if(r.error)throw r.error;const company=pickCompanyRow(r.data)?.company;if(!company)throw new Error('Компания не найдена.');const hoursText=document.getElementById('new-hours').value.trim();const x=await sb.rpc('create_my_company_location',{p_company_id:company.id,p_name:document.getElementById('new-name').value,p_address:document.getElementById('new-address').value,p_city:document.getElementById('new-city').value,p_phone:document.getElementById('new-phone').value,p_hours:hoursText?{text:hoursText}:{},p_official_url:company.website||null});if(x.error)throw x.error;state.textContent='Филиал сохранён. Обновите страницу для проверки.';e.target.reset();document.getElementById('new-city').value='Калининград';}catch(err){state.textContent=err.message||'Не удалось сохранить филиал.';}finally{btn.disabled=false}});
+const form=document.getElementById('branch-form');
+const state=document.getElementById('branch-save-state');
+const messageFor=error=>{
+  const code=String(error?.message||'');
+  if(code.includes('authentication_required'))return 'Сессия истекла. Войдите в личный кабинет снова.';
+  if(code.includes('verified_owner_or_admin_required'))return 'Добавлять филиалы может только подтверждённый владелец или администратор.';
+  if(code.includes('name_address_city_required'))return 'Заполните название филиала, адрес и город.';
+  return code||'Не удалось сохранить филиал.';
+};
+const companyContext=(async()=>{
+  const auth=await sb.auth.getSession();
+  if(!auth.data.session)throw new Error('authentication_required');
+  const result=await sb.rpc('get_my_companies');
+  if(result.error)throw result.error;
+  const row=pickCompanyRow(result.data);
+  if(!row?.company)throw new Error('Компания не найдена.');
+  if(requestedCompanyId&&row.company.id!==requestedCompanyId)throw new Error('Выбранная компания недоступна.');
+  const city=document.getElementById('new-city');
+  if(!city.value&&row.company.city)city.value=row.company.city;
+  return row;
+})();
+companyContext.catch(error=>{state.textContent=messageFor(error);form.querySelector('button').disabled=true});
+form.addEventListener('submit',async event=>{
+  event.preventDefault();
+  const button=form.querySelector('button');
+  button.disabled=true;
+  state.textContent='Проверяем права и сохраняем филиал…';
+  try{
+    const row=await companyContext;
+    const company=row.company;
+    const payload={
+      p_company_id:company.id,
+      p_name:document.getElementById('new-name').value.trim(),
+      p_address:document.getElementById('new-address').value.trim(),
+      p_city:document.getElementById('new-city').value.trim(),
+      p_phone:document.getElementById('new-phone').value.trim()||null,
+      p_hours:document.getElementById('new-hours').value.trim()?{text:document.getElementById('new-hours').value.trim()}:{},
+      p_official_url:company.website||null
+    };
+    const result=await sb.rpc('create_my_company_location',payload);
+    if(result.error)throw result.error;
+    state.textContent='Филиал сохранён. Обновляем список…';
+    setTimeout(()=>location.reload(),650);
+  }catch(error){
+    state.textContent=messageFor(error);
+    button.disabled=false;
+  }
+});
 </script></body>
 </html>
