@@ -27,8 +27,9 @@
 <p class="demo">Пока это интерфейс будущей дополнительной услуги. Пакеты запросов определены, но оплата и сохранение настроек ещё не подключены.</p>
 </main>
 <script type="module">
+const requestedCompanyId=new URLSearchParams(location.search).get('company_id');const pickCompanyRow=rows=>(rows||[]).find(row=>row?.company?.id===requestedCompanyId||row?.company_id===requestedCompanyId)||rows?.[0];const keepCompanyContext=()=>{if(!requestedCompanyId)return;document.querySelectorAll('a[href^="account-"]').forEach(a=>{const u=new URL(a.getAttribute('href'),location.href);u.searchParams.set('company_id',requestedCompanyId);a.href=u.pathname.split('/').pop()+u.search})};keepCompanyContext();
 import{createClient}from'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.115.0/+esm';
 const s=createClient('https://rzhlcszqtuhkhfibygnk.supabase.co','sb_publishable_yhqWJ1eWUznBkqKwPogTrw_xCdCbFA-');
-try{const a=await s.auth.getSession();if(!a.data.session)throw Error();const m=await s.rpc('get_my_companies');const company=m.data?.[0]?.company;if(!company)throw Error();document.getElementById('company-context').textContent=company.name+(company.city?' · '+company.city:'')}catch{document.getElementById('company-context').textContent='Компания не определена'}
+try{const a=await s.auth.getSession();if(!a.data.session)throw Error();const m=await s.rpc('get_my_companies');const company=pickCompanyRow(m.data)?.company;if(!company)throw Error();document.getElementById('company-context').textContent=company.name+(company.city?' · '+company.city:'')}catch{document.getElementById('company-context').textContent='Компания не определена'}
 </script>
 </body></html>
