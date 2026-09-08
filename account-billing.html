@@ -5,34 +5,59 @@
 <header><div class="wrap top"><a class="brand" href="https://отзыв.com/">отзыв<span>.com</span></a><b>ПРЕДПРОСМОТР ЛИЧНОГО КАБИНЕТА</b></div></header>
 <main class="wrap">
 <nav aria-label="Навигация кабинета"><a href="account-preview.html">Главная</a><a href="account-profile.html">Профиль</a><a href="account-branches.html">Филиалы</a><a href="account-services.html">Услуги</a><a href="account-media.html">Фото</a><a href="account-reviews.html">Отзывы</a><a class="active" href="#billing">Тариф и оплата</a><a href="account-notifications.html">Уведомления</a><a href="account-analytics.html">Статистика</a></nav>
-<section class="intro"><div><small>ПОДПИСКА КОМПАНИИ</small><h1>Тариф и оплата</h1><p>Доступные тарифы уже заведены в системе, но оформление оплаты в этом предпросмотре не подключено.</p></div><a href="profile.html">Открыть публичный профиль ↗</a></section>
+<section class="intro"><div><small>ПОДПИСКА КОМПАНИИ</small><h1>Тариф и оплата</h1><p>Коммерческие условия платных тарифов ещё не утверждены. Оплата пока не подключена.</p><p class="company-context" id="company-context">Определяем текущую компанию…</p></div><a id="public-profile-link" href="#" aria-disabled="true">Открыть публичный профиль ↗</a></section>
 <section class="billing-layout" id="billing">
 <article class="plan"><div class="plan-head"><div><small>ТЕКУЩИЙ СТАТУС</small><h2 id="current-plan">Подписка не активна</h2></div><span id="subscription-status">НЕТ АКТИВНОЙ ПОДПИСКИ</span></div><p id="current-note">Для этой компании активная подписка в базе пока не создана. Ни один платёж не зарегистрирован.</p><dl><div><dt>Стоимость</dt><dd id="current-price">—</dd></div><div><dt>Период</dt><dd id="current-period">—</dd></div><div><dt>Дата окончания</dt><dd id="current-end">—</dd></div><div><dt>Автопродление</dt><dd id="current-auto">Не подключено</dd></div></dl><button disabled>Перейти к оплате</button></article>
-<aside class="visibility"><small>ДОСТУПНЫЕ ТАРИФЫ</small><h2>Планы системы</h2><div id="plans"><div class="plan-option"><b>Загрузка…</b><p>Получаем актуальные условия из базы.</p></div></div><div><b>Важно</b><p>Цена и состав тарифа должны быть показаны до подтверждения платежа. Фактическое списание возможно только после подключения защищённого платёжного контура.</p></div></aside>
+<aside class="visibility"><small>ТАРИФНЫЕ УРОВНИ</small><h2>Возможности профиля</h2><div id="plans"><div class="plan-option"><b>Загрузка…</b><p>Получаем актуальные условия из базы.</p></div></div><div><b>Важно</b><p>Платный тариф можно будет выбрать только после утверждения точной цены, состава услуги, срока, отмены и возврата. Сейчас списание невозможно.</p></div></aside>
 </section>
 <section class="history"><div class="section-head"><div><small>ОПЕРАЦИИ</small><h2>История платежей</h2></div><button disabled>Скачать документы</button></div><div class="empty"><b id="payment-state">Платежей пока нет</b><p id="payment-note">В базе не зарегистрированы платежные операции этой компании.</p></div></section>
 <section class="rules"><div><h3>Перед оплатой</h3><p>Показываются точная цена, период, условия отмены и возврата, а также момент включения оплачиваемых возможностей.</p></div><div><h3>Защита от повторной оплаты</h3><p>Платёжный контур должен использовать идемпотентный идентификатор, чтобы повторная доставка события не продлевала услугу дважды.</p></div><div><h3>Независимость отзывов</h3><p>Оплата не даёт права удалять отзывы, менять оценки пользователей или управлять решением модератора.</p></div></section>
 <p class="demo" id="data-note">Данные тарифов читаются из системы. Оплата и изменение подписки отключены в предпросмотре.</p>
 </main>
-<script>
-(async()=>{
-const project='https://rzhlcszqtuhkhfibygnk.supabase.co';const key='sb_publishable_yhqWJ1eWUznBkqKwPogTrw_xCdCbFA-';const headers={'apikey':key,'Authorization':'Bearer '+key};
-const el=id=>document.getElementById(id), esc=v=>String(v??'').replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[c]));
-const money=v=>v===null||v===undefined?'—':Number(v).toLocaleString('ru-RU')+' ₽'; const period=v=>v==='month'?'месяц':v==='year'?'год':v==='none'?'без периода':(v||'—');
+<script type="module">
+import{createClient}from'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.115.0/+esm';
+const s=createClient('https://rzhlcszqtuhkhfibygnk.supabase.co','sb_publishable_yhqWJ1eWUznBkqKwPogTrw_xCdCbFA-');
+const el=id=>document.getElementById(id),esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const period=v=>v==='month'?'месяц':v==='year'?'год':v==='none'?'без периода':(v||'—');
 try{
-const [plansRes,subRes,payRes]=await Promise.all([
-fetch(project+'/rest/v1/plans?select=code,name,price_rub,billing_period,active&active=eq.true&order=price_rub',{headers}),
-fetch(project+'/rest/v1/subscriptions?select=plan_code,status,current_period_end,provider&limit=1',{headers}),
-fetch(project+'/rest/v1/payments?select=amount_rub,currency,status,paid,created_at,confirmed_at&limit=20',{headers})
-]);
-const plans=plansRes.ok?await plansRes.json():[];const subs=subRes.ok?await subRes.json():[];const payments=payRes.ok?await payRes.json():[];
-const activeSub=subs.find(s=>['active','trialing'].includes(String(s.status)))||null;
-if(activeSub){el('current-plan').textContent=activeSub.plan_code||'Активный тариф';el('subscription-status').textContent=String(activeSub.status||'АКТИВНАЯ ПОДПИСКА').toUpperCase();el('current-end').textContent=activeSub.current_period_end?new Date(activeSub.current_period_end).toLocaleDateString('ru-RU'):'—';const p=plans.find(x=>x.code===activeSub.plan_code);if(p){el('current-price').textContent=money(p.price_rub);el('current-period').textContent=period(p.billing_period);}el('current-note').textContent='Активная подписка найдена в системе. Управление подпиской в предпросмотре отключено.';}
-else{el('current-note').textContent='Активной подписки в системе пока нет. Доступ к тарифам показан справочно; оформление платежа отключено.';}
-el('plans').innerHTML=plans.length?plans.map(p=>'<div class="plan-option"><b>'+esc(p.name||p.code)+'</b><strong>'+money(p.price_rub)+'</strong><p>'+esc(period(p.billing_period))+' · '+(p.active?'доступен':'недоступен')+'</p><button disabled>Выбрать тариф</button></div>').join(''):'<div class="plan-option"><b>Тарифы не опубликованы</b><p>В системе нет активных тарифов.</p></div>';
-if(payments.length){el('payment-state').textContent='История платежей доступна';el('payment-note').textContent='Найдено операций: '+payments.length+'. В этом предпросмотре детали платежей не изменяются.';}else{el('payment-state').textContent='Платежей пока нет';el('payment-note').textContent='В базе не зарегистрированы платежные операции для текущего предпросмотра.';}
-el('data-note').textContent='Данные тарифов получены из системы · подписка: '+(activeSub?'активна':'не активна')+' · управление оплатой отключено.';
-}catch(e){el('plans').innerHTML='<div class="plan-option"><b>Не удалось загрузить тарифы</b><p>Система временно недоступна. Демонстрационные цены не подставляются.</p></div>';el('data-note').textContent='Не удалось получить данные тарифов · интерфейс остаётся доступным.';}
-})();
+  const session=await s.auth.getSession();
+  if(!session.data.session)throw Error('Сначала войдите в личный кабинет.');
+  const mine=await s.rpc('get_my_companies');
+  if(mine.error)throw mine.error;
+  const current=mine.data?.[0],company=current?.company,verified=current?.membership?.verification_status==='verified';
+  if(!company)throw Error('Компания не найдена.');
+  el('company-context').textContent=company.name+(company.city?' · '+company.city:'');
+  const link=el('public-profile-link');link.href='https://'+company.slug+'.xn--b1ajuq0c.com/';link.removeAttribute('aria-disabled');
+  const plansResult=await s.from('plans').select('code,name,billing_period,active').eq('active',true).order('price_rub');
+  if(plansResult.error)throw plansResult.error;
+  let subscriptions=[],payments=[];
+  if(verified){
+    const [subResult,payResult]=await Promise.all([
+      s.from('subscriptions').select('plan_code,status,current_period_end,provider').eq('company_id',company.id).order('created_at',{ascending:false}).limit(10),
+      s.from('payments').select('amount_rub,currency,status,paid,created_at,confirmed_at,orders!inner(company_id)').eq('orders.company_id',company.id).order('created_at',{ascending:false}).limit(20)
+    ]);
+    if(subResult.error)throw subResult.error;if(payResult.error)throw payResult.error;
+    subscriptions=subResult.data||[];payments=payResult.data||[];
+  }
+  const plans=plansResult.data||[],activeSub=subscriptions.find(x=>['active','trialing','grace_period'].includes(String(x.status)))||null;
+  if(activeSub){
+    const plan=plans.find(x=>x.code===activeSub.plan_code);
+    el('current-plan').textContent=plan?.name||activeSub.plan_code||'Активный тариф';
+    el('subscription-status').textContent=String(activeSub.status||'АКТИВНАЯ ПОДПИСКА').toUpperCase();
+    el('current-period').textContent=period(plan?.billing_period);
+    el('current-end').textContent=activeSub.current_period_end?new Date(activeSub.current_period_end).toLocaleDateString('ru-RU'):'—';
+    el('current-note').textContent='Подписка найдена для компании «'+company.name+'». Управление и продление пока отключены.';
+  }else{
+    el('current-note').textContent=verified?'У компании «'+company.name+'» нет активной подписки. Оплата пока не подключена.':'Подписка станет доступна после подтверждения прав на компанию. Оплата пока не подключена.';
+  }
+  el('plans').innerHTML=plans.length?plans.map(plan=>'<div class="plan-option"><b>'+esc(plan.name||plan.code)+'</b><strong>'+(plan.code==='free'?'Бесплатно':'Условия уточняются')+'</strong><p>'+esc(period(plan.billing_period))+'</p><button disabled>'+(plan.code==='free'?'Текущий базовый уровень':'Пока недоступно')+'</button></div>').join(''):'<div class="plan-option"><b>Тарифные уровни не опубликованы</b><p>Данные временно отсутствуют.</p></div>';
+  if(payments.length){el('payment-state').textContent='История платежей доступна';el('payment-note').textContent='Найдено операций: '+payments.length+'. Данные относятся только к компании «'+company.name+'».'}
+  else{el('payment-state').textContent='Платежей пока нет';el('payment-note').textContent=verified?'Для компании «'+company.name+'» платежные операции не зарегистрированы.':'История платежей будет доступна после подтверждения прав на компанию.'}
+  el('data-note').textContent='Показаны данные компании «'+company.name+'» · подписка: '+(activeSub?'активна':'не активна')+' · оплата отключена.';
+}catch(e){
+  el('company-context').textContent='Компания не определена';
+  el('plans').innerHTML='<div class="plan-option"><b>Не удалось загрузить данные</b><p>'+esc(e.message||'Система временно недоступна.')+'</p></div>';
+  el('data-note').textContent='Не удалось получить данные текущей компании.';
+}
 </script>
 </body></html>
