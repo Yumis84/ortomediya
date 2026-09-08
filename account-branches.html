@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#101828">
   <title>Филиалы компании — кабинет | Отзыв.com</title>
   <link rel="icon" href="https://отзыв.com/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="account-branches.css?v=managed-branches">
+  <link rel="stylesheet" href="account-branches.css?v=fbe49a77">
 </head>
 <body>
   <header><div class="wrap top"><a class="brand" href="https://отзыв.com/">отзыв<span>.com</span></a><b>ПРЕДПРОСМОТР ЛИЧНОГО КАБИНЕТА</b></div></header>
@@ -19,7 +19,10 @@
     <section class="branch-list" id="branches">
       <article id="branches-loading"><span class="num">—</span><div><h2>Загрузка филиалов…</h2><p>Получаем актуальные данные публичного профиля.</p></div><em>Проверка данных</em><button disabled>Редактировать</button></article>
     </section>
-    <div<script type="module">
+    <div class="rule"><b>Сохранение:</b> филиал публикуется после защищённой проверки прав владельца. Изменение фиксируется в журнале, а данные сразу появляются в профиле.</div>
+    <p class="demo" id="data-note">Загружаем филиалы выбранной компании.</p>
+  </main>
+<script type="module">
 import{createClient}from'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.115.0/+esm';
 
 const requestedCompanyId=new URLSearchParams(location.search).get('company_id');
