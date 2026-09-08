@@ -12,19 +12,20 @@
 <body>
   <header><div class="wrap top"><a class="brand" href="https://отзыв.com/">отзыв<span>.com</span></a><b>ПРЕДПРОСМОТР ЛИЧНОГО КАБИНЕТА</b></div></header>
   <main class="wrap">
-    <nav aria-label="Навигация кабинета"><a href="account-preview.html">Главная</a><a href="account-profile.html">Профиль</a><a href="account-branches.html">Филиалы</a><a href="account-services.html">Услуги</a><a href="account-media.html">Фото</a><a href="account-reviews.html">Отзывы</a><a href="account-billing.html">Тариф и оплата</a><a href="account-notifications.html">Уведомления</a><a class="active" href="#analytics">Статистика</a></nav>
-    <section class="intro"><div><small>ВИДИМОСТЬ ПРОФИЛЯ</small><h1>Статистика</h1><p>Измеримые данные о состоянии профиля, посещениях и переходах.</p></div><a href="profile.html">Открыть публичный профиль ↗</a></section>
+    <nav aria-label="Навигация кабинета"><a href="account-preview.html">Главная</a><a href="account-profile.html">Профиль</a><a href="account-branches.html">Филиалы</a><a href="account-services.html">Услуги</a><a href="account-media.html">Фото</a><a href="account-reviews.html">Отзывы</a><a href="account-billing.html">Тариф и оплата</a><a href="account-ai-assistant.html">AI-ассистент</a><a href="account-notifications.html">Уведомления</a><a class="active" href="#analytics">Статистика</a></nav>
+    <section class="intro"><div><small>ВИДИМОСТЬ ПРОФИЛЯ</small><h1>Статистика</h1><p>Измеримые данные о состоянии профиля, посещениях и переходах.</p><p class="company-context" id="company-context">Определяем текущую компанию…</p></div><a id="public-profile-link" href="#" aria-disabled="true">Открыть публичный профиль ↗</a></section>
     <section class="known" id="analytics" aria-live="polite">
       <article><b id="branchesCount">—</b><span>филиалов в профиле</span></article>
       <article><b id="servicesCount">—</b><span>опубликованных услуг</span></article>
       <article><b id="sourcesCount">—</b><span>внешних источников</span></article>
-      <article><b id="reviewsCount">—</b><span>собственных отзывов</span></article>
+      <article><b id="reviewsCount">—</b><span>отзывов в профиле</span></article>
     </section>
     <section class="traffic">
       <div class="section-head"><div><small>ПОСЕЩАЕМОСТЬ</small><h2>Данные ещё не собираются</h2></div><span>АНАЛИТИКА НЕ ПОДКЛЮЧЕНА</span></div>
       <p>В текущей модели данных нет подтверждённого счётчика просмотров профиля, уникальных посетителей или переходов. Поэтому цифры не имитируются.</p>
       <div class="empty-chart" role="img" aria-label="Статистика посещаемости пока недоступна"><div><b>Нет данных за период</b><span>Сбор статистики появится после отдельного подключения аналитики и событийного трекинга.</span></div></div>
     </section>
+    <section class="ai-analytics"><div class="section-head"><div><small>AI‑АССИСТЕНТ</small><h2>Работа с обращениями</h2></div><span>ЕЩЁ НЕ ПОДКЛЮЧЁН</span></div><div class="ai-metrics"><article><b>—</b><span>осталось запросов</span></article><article><b>—</b><span>диалогов</span></article><article><b>—</b><span>обращений</span></article><article><b>—</b><span>передано специалисту</span></article></div><p>Показатели появятся после подключения AI‑ассистента. Диалоги не смешиваются со статистикой отзывов.</p></section>
     <section class="visibility-grid">
       <article><small>ПОИСКОВЫЕ СИСТЕМЫ</small><h2>Статус индексации</h2><dl><div><dt>Тестовый стенд</dt><dd>Закрыт от индексации</dd></div><div><dt>Рабочий оплаченный профиль</dt><dd>Индексация разрешена</dd></div><div><dt>Неоплаченный профиль</dt><dd>Индексация закрыта</dd></div></dl></article>
       <article><small>НЕЙРОСЕТИ</small><h2>Данные профиля</h2><dl><div><dt>Публичный HTML</dt><dd>Подготовлен</dd></div><div><dt>Структурированные данные</dt><dd>Подготовлены</dd></div><div><dt>Гарантия рекомендаций</dt><dd>Не предоставляется</dd></div></dl></article>
@@ -32,33 +33,32 @@
     <section class="actions"><div><small>ПЕРЕХОДЫ ПОЛЬЗОВАТЕЛЕЙ</small><h2>Какие действия будут измеряться</h2></div><div class="action-grid"><span>Открытие сайта компании</span><span>Нажатие на телефон</span><span>Построение маршрута</span><span>Переход к филиалу</span></div><p>Содержание звонков, сообщений и действий на сайте компании не отслеживается.</p></section>
     <p id="state" class="demo">Загрузка подтверждённых данных профиля…</p>
   </main>
-  <script>
-    const SUPABASE_URL = 'https://rzhlcszqtuhkhfibygnk.supabase.co';
-    const SUPABASE_KEY = 'sb_publishable_yhqWJ1eWUznBkqKwPogTrw_xCdCbFA-';
-    const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-    async function loadProfile(){
-      const state = document.getElementById('state');
-      try {
-        const response = await fetch(`${SUPABASE_URL}/rest/v1/rpc/get_public_company_profile_v2`, {
-          method:'POST', headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'}, body:JSON.stringify({p_slug:'ortomediya'})
-        });
-        if(!response.ok) throw new Error(`HTTP ${response.status}`);
-        const data = await response.json();
-        const company = data?.company || {};
-        const branches = Array.isArray(data?.locations) ? data.locations : [];
-        const services = Array.isArray(data?.services) ? data.services : [];
-        const sources = Array.isArray(data?.sources) ? data.sources : [];
-        const reviews = Array.isArray(data?.reviews) ? data.reviews : [];
-        document.getElementById('branchesCount').textContent = branches.length;
-        document.getElementById('servicesCount').textContent = services.length;
-        document.getElementById('sourcesCount').textContent = sources.length;
-        document.getElementById('reviewsCount').textContent = reviews.length;
-        state.textContent = `Данные профиля подтверждены из публичного источника: ${esc(company.name || 'компания')} · статистика посещаемости пока не подключена.`;
-      } catch(error) {
-        state.textContent = 'Не удалось загрузить подтверждённое состояние профиля. Статистика посещаемости не подменяется демо-значениями.';
-      }
-    }
-    loadProfile();
-  </script>
+  <script type="module">
+import{createClient}from'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.115.0/+esm';
+const s=createClient('https://rzhlcszqtuhkhfibygnk.supabase.co','sb_publishable_yhqWJ1eWUznBkqKwPogTrw_xCdCbFA-');
+try{
+  const session=await s.auth.getSession();
+  if(!session.data.session)throw Error('Сначала войдите в личный кабинет.');
+  const mine=await s.rpc('get_my_companies');
+  if(mine.error)throw mine.error;
+  const company=mine.data?.[0]?.company;
+  if(!company)throw Error('Компания не найдена.');
+  document.getElementById('company-context').textContent=company.name+(company.city?' · '+company.city:'');
+  const link=document.getElementById('public-profile-link');link.href='https://'+company.slug+'.xn--b1ajuq0c.com/';link.removeAttribute('aria-disabled');
+  const profile=await s.rpc('get_public_company_profile_v2',{p_slug:company.slug});
+  if(profile.error)throw profile.error;
+  const data=profile.data;
+  if(!data)throw Error('Публичный профиль не найден.');
+  const branches=Array.isArray(data.locations)?data.locations:[],services=Array.isArray(data.services)?data.services:[],sources=Array.isArray(data.sources)?data.sources:[],reviews=Array.isArray(data.reviews)?data.reviews:[];
+  document.getElementById('branchesCount').textContent=branches.length;
+  document.getElementById('servicesCount').textContent=services.length;
+  document.getElementById('sourcesCount').textContent=sources.length;
+  document.getElementById('reviewsCount').textContent=reviews.length;
+  document.getElementById('state').textContent='Показаны подтверждённые данные компании «'+company.name+'». Посещаемость и AI‑метрики пока не собираются.';
+}catch(error){
+  document.getElementById('company-context').textContent='Компания не определена';
+  document.getElementById('state').textContent=error.message||'Не удалось загрузить состояние профиля. Статистика не подменяется демонстрационными значениями.';
+}
+</script>
 </body>
 </html>
