@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ru">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#101828"><title>AI-ассистент компании — кабинет | Отзыв.com</title><link rel="icon" href="https://отзыв.com/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="account-ai-assistant.css"></head>
+<body>
+<header><div class="wrap top"><a class="brand" href="https://отзыв.com/">отзыв<span>.com</span></a><b>ПРЕДПРОСМОТР ЛИЧНОГО КАБИНЕТА</b></div></header>
+<main class="wrap">
+<nav aria-label="Навигация кабинета"><a href="account-preview.html">Главная</a><a href="account-profile.html">Профиль</a><a href="account-branches.html">Филиалы</a><a href="account-services.html">Услуги</a><a href="account-media.html">Фото</a><a href="account-reviews.html">Отзывы</a><a href="account-billing.html">Тариф и оплата</a><a class="active" href="#assistant">AI-ассистент</a><a href="account-notifications.html">Уведомления</a><a href="account-analytics.html">Статистика</a></nav>
+<section class="intro"><div><small>ДОПОЛНИТЕЛЬНАЯ УСЛУГА</small><h1>AI-ассистент компании</h1><p>Настройте, как ассистент отвечает посетителям профиля, какие знания использует и когда передаёт обращение человеку.</p><p class="company-context" id="company-context">Определяем текущую компанию…</p></div><a href="account-billing.html">Тариф и подключение</a></section>
+<section class="status-card" id="assistant"><div><small>СТАТУС</small><h2>Услуга не подключена</h2><p>Настройки показаны как будущий интерфейс. Сохранение и публикация ассистента будут доступны после подключения услуги.</p></div><span>УСЛОВИЯ УТОЧНЯЮТСЯ</span></section>
+<section class="assistant-layout">
+<form class="settings" aria-labelledby="settings-title">
+<small>НАСТРОЙКИ ДИАЛОГА</small><h2 id="settings-title">Инструкция для ассистента</h2>
+<label>Название ассистента<input type="text" value="" placeholder="Например, консультант компании" disabled></label>
+<label>Первое сообщение<textarea rows="3" placeholder="Коротко поприветствуйте посетителя и предложите помощь" disabled></textarea></label>
+<label>Инструкция для AI (промпт)<textarea rows="9" placeholder="Опишите роль ассистента, стиль общения, порядок вопросов, допустимые ответы и ситуации, когда нужно передать диалог человеку" disabled></textarea></label>
+<label>Стиль общения<select disabled><option>Доброжелательный и деловой</option><option>Краткий</option><option>Подробный</option></select></label>
+<button type="button" disabled>Сохранить настройки</button>
+</form>
+<aside class="sources"><small>ИСТОЧНИКИ И ДЕЙСТВИЯ</small><h2>Что можно подключить</h2>
+<div class="source-item"><b>Данные профиля</b><p>Описание, услуги, филиалы, контакты и расписание компании.</p><span>Обязательный источник</span></div>
+<div class="source-item"><b>База знаний компании</b><p>Проверенные документы, ответы на вопросы, правила и условия работы.</p><span>Будет настраиваться</span></div>
+<div class="source-item"><b>Передача обращения</b><p>После согласия клиента — CRM, электронная почта или мессенджер.</p><span>Будет настраиваться</span></div>
+</aside>
+</section>
+<section class="guardrails"><div><h3>Компания настраивает</h3><p>Инструкцию, тон общения, вопросы, знания и сценарий передачи обращения.</p></div><div><h3>Платформа защищает</h3><p>Системные ограничения, персональные данные, разделение компаний и секретные ключи.</p></div><div><h3>Ассистент не изменяет</h3><p>Отзывы, оценки, решения модерации и независимые сведения о репутации.</p></div></section>
+<p class="demo">Пока это интерфейс будущей дополнительной услуги. Цена, лимиты и сохранение настроек ещё не подключены.</p>
+</main>
+<script type="module">
+import{createClient}from'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.115.0/+esm';
+const s=createClient('https://rzhlcszqtuhkhfibygnk.supabase.co','sb_publishable_yhqWJ1eWUznBkqKwPogTrw_xCdCbFA-');
+try{const a=await s.auth.getSession();if(!a.data.session)throw Error();const m=await s.rpc('get_my_companies');const company=m.data?.[0]?.company;if(!company)throw Error();document.getElementById('company-context').textContent=company.name+(company.city?' · '+company.city:'')}catch{document.getElementById('company-context').textContent='Компания не определена'}
+</script>
+</body></html>
