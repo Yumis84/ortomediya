@@ -16,6 +16,7 @@
 <p class="demo" id="data-note">Данные тарифов читаются из системы. Оплата и изменение подписки отключены в предпросмотре.</p>
 </main>
 <script type="module">
+const requestedCompanyId=new URLSearchParams(location.search).get('company_id');const pickCompanyRow=rows=>(rows||[]).find(row=>row?.company?.id===requestedCompanyId||row?.company_id===requestedCompanyId)||rows?.[0];const keepCompanyContext=()=>{if(!requestedCompanyId)return;document.querySelectorAll('a[href^="account-"]').forEach(a=>{const u=new URL(a.getAttribute('href'),location.href);u.searchParams.set('company_id',requestedCompanyId);a.href=u.pathname.split('/').pop()+u.search})};keepCompanyContext();
 import{createClient}from'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.115.0/+esm';
 const s=createClient('https://rzhlcszqtuhkhfibygnk.supabase.co','sb_publishable_yhqWJ1eWUznBkqKwPogTrw_xCdCbFA-');
 const el=id=>document.getElementById(id),esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -25,7 +26,7 @@ try{
   if(!session.data.session)throw Error('Сначала войдите в личный кабинет.');
   const mine=await s.rpc('get_my_companies');
   if(mine.error)throw mine.error;
-  const current=mine.data?.[0],company=current?.company,verified=current?.membership?.verification_status==='verified';
+  const current=pickCompanyRow(mine.data),company=current?.company,verified=current?.membership?.verification_status==='verified';
   if(!company)throw Error('Компания не найдена.');
   el('company-context').textContent=company.name+(company.city?' · '+company.city:'');
   const link=el('public-profile-link');link.href='https://'+company.slug+'.xn--b1ajuq0c.com/';link.removeAttribute('aria-disabled');
