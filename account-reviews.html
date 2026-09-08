@@ -7,7 +7,7 @@
 <header><div class="wrap top"><a class="brand" href="https://отзыв.com/">отзыв<span>.com</span></a><b>ПРЕДПРОСМОТР ЛИЧНОГО КАБИНЕТА</b></div></header>
 <main class="wrap">
 <nav aria-label="Навигация кабинета"><a href="account-preview.html">Главная</a><a href="account-profile.html">Профиль</a><a href="account-branches.html">Филиалы</a><a href="account-services.html">Услуги</a><a href="account-media.html">Фото</a><a class="active" href="#reviews">Отзывы</a><a href="account-billing.html">Тариф и оплата</a><a href="account-notifications.html">Уведомления</a><a href="account-analytics.html">Статистика</a></nav>
-<section class="intro"><div><small>ОТЗЫВЫ НА ОТЗЫВ.COM</small><h1>Отзывы и ответы</h1><p>Собственные отзывы компании хранятся отдельно от рейтингов внешних площадок. Здесь показываются только данные, подтверждённые публичным профилем.</p></div><a href="profile.html#own">Открыть отзывы в профиле ↗</a></section>
+<section class="intro"><div><small>ОТЗЫВЫ НА ОТЗЫВ.COM</small><h1>Отзывы и ответы</h1><p class="company-context" id="company-context">Определяем текущую компанию…</p><p>Собственные отзывы компании хранятся отдельно от рейтингов внешних площадок. Здесь показываются только данные, подтверждённые публичным профилем.</p></div><a id="public-review-link" href="#" aria-disabled="true">Открыть отзывы в профиле ↗</a></section>
 <section class="summary"><article><b id="published-count">—</b><span>опубликованных отзывов</span></article><article><b id="pending-count">0</b><span>ожидают ответа</span></article><article><b id="answer-count">0</b><span>ответов компании</span></article><article><b id="source-count">—</b><span>внешних источников</span></article></section>
 <section class="review-layout" id="reviews">
 <article class="queue">
@@ -21,27 +21,57 @@
 <div class="rule"><b>Независимость:</b> оплата профиля не даёт компании права удалять отзывы, менять оценки пользователей или управлять решением модератора. Внешние рейтинги не превращаются в отзывы Отзыв.com.</div>
 <p class="demo" id="data-note">Данные загружаются из публичного профиля. Действия компании пока отключены.</p>
 </main>
-<script>
-(async()=>{
-const endpoint='https://rzhlcszqtuhkhfibygnk.supabase.co/rest/v1/rpc/get_public_company_profile_v2';
-const key='sb_publishable_yhqWJ1eWUznBkqKwPogTrw_xCdCbFA-';
-const el=id=>document.getElementById(id); const text=(id,v)=>{if(el(id))el(id).textContent=v};
-const esc=v=>String(v??'').replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[c]));
+<script type="module">
+import{createClient}from'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.115.0/+esm';
+const s=createClient('https://rzhlcszqtuhkhfibygnk.supabase.co','sb_publishable_yhqWJ1eWUznBkqKwPogTrw_xCdCbFA-');
+const el=id=>document.getElementById(id),text=(id,v)=>{if(el(id))el(id).textContent=v};
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const val=(o,keys)=>{for(const k of keys){if(o&&o[k]!==null&&o[k]!==undefined&&String(o[k]).trim()!=='')return o[k]}return null};
 try{
-const res=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json','apikey':key,'Authorization':'Bearer '+key},body:JSON.stringify({p_slug:'ortomediya'})});
-if(!res.ok)throw new Error('HTTP '+res.status); const data=await res.json(); if(!data)throw new Error('Профиль не найден');
-const reviews=Array.isArray(data.reviews)?data.reviews:[]; const sources=Array.isArray(data.sources)?data.sources:[];
-const published=reviews.filter(r=>String(val(r,['status'])||'published')==='published');
-text('published-count',published.length); text('source-count',sources.length);
-const state=el('review-state');
-if(!published.length){state.innerHTML='<span aria-hidden="true">☆</span><b>Опубликованных отзывов пока нет</b><p>В базе Отзыв.com сейчас нет собственных опубликованных отзывов. Рейтинги внешних площадок показываются отдельно и не смешиваются с этим списком.</p>';} else {
-state.className='review-list'; state.innerHTML=published.map(r=>{const rating=val(r,['rating']); const author=val(r,['author_display_name','author','name'])||'Автор'; const body=val(r,['body','excerpt'])||'Текст отзыва отсутствует'; const date=val(r,['published_at','created_at']); return '<article class="review-card"><div><b>'+esc(author)+'</b><span>'+esc(rating!==null?rating+' / '+(val(r,['rating_scale'])||5):'Без оценки')+'</span></div><p>'+esc(body)+'</p><small>'+esc(date?new Date(date).toLocaleDateString('ru-RU'):'Дата не указана')+'</small></article>';}).join('');
+  const session=await s.auth.getSession();
+  if(!session.data.session)throw Error('Сначала войдите в личный кабинет.');
+  const mine=await s.rpc('get_my_companies');
+  if(mine.error)throw mine.error;
+  const current=mine.data?.[0],company=current?.company;
+  if(!company)throw Error('Компания не найдена.');
+  text('company-context',company.name+(company.city?' · '+company.city:''));
+  const publicLink=el('public-review-link');
+  publicLink.href='https://'+company.slug+'.xn--b1ajuq0c.com/#reviews';
+  publicLink.removeAttribute('aria-disabled');
+  const profile=await s.rpc('get_public_company_profile_v2',{p_slug:company.slug});
+  if(profile.error)throw profile.error;
+  const data=profile.data;
+  if(!data)throw Error('Публичный профиль не найден.');
+  const reviews=Array.isArray(data.reviews)?data.reviews:[],sources=Array.isArray(data.sources)?data.sources:[];
+  const published=reviews.filter(r=>String(val(r,['status'])||'published')==='published');
+  let statements=[];
+  if(current.membership?.verification_status==='verified'){
+    const own=await s.from('company_statements').select('review_id,status').eq('company_id',company.id);
+    if(!own.error)statements=own.data||[];
+  }
+  const answered=new Set(statements.filter(x=>x.status==='published').map(x=>String(x.review_id)));
+  const inProgress=new Set(statements.filter(x=>['submitted','under_review'].includes(x.status)).map(x=>String(x.review_id)));
+  text('published-count',published.length);
+  text('pending-count',published.filter(r=>!answered.has(String(r.id))&&!inProgress.has(String(r.id))).length);
+  text('answer-count',answered.size);
+  text('source-count',sources.length);
+  const state=el('review-state');
+  if(!published.length){
+    state.innerHTML='<span aria-hidden="true">☆</span><b>Опубликованных отзывов пока нет</b><p>У этой компании пока нет собственных опубликованных отзывов. Рейтинги внешних площадок показываются отдельно.</p>';
+  }else{
+    state.className='review-list';
+    state.innerHTML=published.map(r=>{const rating=val(r,['rating']),author=val(r,['author_display_name','author','name'])||'Автор',body=val(r,['body','excerpt'])||'Текст отзыва отсутствует',date=val(r,['published_at','created_at']);return '<article class="review-card"><div><b>'+esc(author)+'</b><span>'+esc(rating!==null?rating+' / '+(val(r,['rating_scale'])||5):'Без оценки')+'</span></div><p>'+esc(body)+'</p><small>'+esc(date?new Date(date).toLocaleDateString('ru-RU'):'Дата не указана')+'</small></article>'}).join('');
+  }
+  if(sources.length){
+    el('external-sources').innerHTML='<div class="source-note"><b>Внешние источники</b><p>'+sources.map(src=>{const snap=src.latest_rating||{};return esc(val(src,['name','source_type','source'])||'Источник')+' — '+(val(snap,['rating'])!==null?esc(val(snap,['rating']))+' / '+esc(val(snap,['rating_scale'])||5):'рейтинг не получен')}).join(' · ')+'</p><small>Эти оценки не являются отзывами Отзыв.com и не участвуют в собственном рейтинге.</small></div>';
+  }else el('external-sources').innerHTML='';
+  text('data-note','Показаны данные компании «'+company.name+'» · опубликованных собственных отзывов: '+published.length+'.');
+}catch(e){
+  text('published-count','—');text('pending-count','—');text('answer-count','—');text('source-count','—');
+  text('company-context','Компания не определена');
+  el('review-state').innerHTML='<span aria-hidden="true">!</span><b>Не удалось загрузить отзывы</b><p>'+esc(e.message||'Данные временно недоступны.')+'</p>';
+  text('data-note','Не удалось получить данные текущей компании.');
 }
-if(sources.length){el('external-sources').innerHTML='<div class="source-note"><b>Внешние источники</b><p>'+sources.map(s=>esc(val(s,['source_type','source','name'])||'Источник')+' — '+(val(s,['rating'])!==null?esc(val(s,['rating']))+' / '+esc(val(s,['rating_scale'])||5):'рейтинг не получен')).join(' · ')+'</p><small>Эти оценки не являются отзывами Отзыв.com и не участвуют в собственном рейтинге.</small></div>';} else el('external-sources').innerHTML='';
-text('data-note','Данные получены из публичного профиля · опубликованных собственных отзывов: '+published.length+' · изменение данных пока отключено.');
-}catch(e){text('published-count','—');text('source-count','—');el('review-state').innerHTML='<span aria-hidden="true">!</span><b>Не удалось загрузить отзывы</b><p>Публичный профиль временно недоступен. Данные не подменяются демонстрационными значениями.</p>';text('data-note','Не удалось получить данные публичного профиля · интерфейс остаётся доступным.');}
-})();
 </script>
 </body>
 </html>
