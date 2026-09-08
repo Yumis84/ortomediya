@@ -34,6 +34,7 @@
     <p id="state" class="demo">Загрузка подтверждённых данных профиля…</p>
   </main>
   <script type="module">
+const requestedCompanyId=new URLSearchParams(location.search).get('company_id');const pickCompanyRow=rows=>(rows||[]).find(row=>row?.company?.id===requestedCompanyId||row?.company_id===requestedCompanyId)||rows?.[0];const keepCompanyContext=()=>{if(!requestedCompanyId)return;document.querySelectorAll('a[href^="account-"]').forEach(a=>{const u=new URL(a.getAttribute('href'),location.href);u.searchParams.set('company_id',requestedCompanyId);a.href=u.pathname.split('/').pop()+u.search})};keepCompanyContext();
 import{createClient}from'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.115.0/+esm';
 const s=createClient('https://rzhlcszqtuhkhfibygnk.supabase.co','sb_publishable_yhqWJ1eWUznBkqKwPogTrw_xCdCbFA-');
 try{
@@ -41,7 +42,7 @@ try{
   if(!session.data.session)throw Error('Сначала войдите в личный кабинет.');
   const mine=await s.rpc('get_my_companies');
   if(mine.error)throw mine.error;
-  const company=mine.data?.[0]?.company;
+  const company=pickCompanyRow(mine.data)?.company;
   if(!company)throw Error('Компания не найдена.');
   document.getElementById('company-context').textContent=company.name+(company.city?' · '+company.city:'');
   const link=document.getElementById('public-profile-link');link.href='https://'+company.slug+'.xn--b1ajuq0c.com/';link.removeAttribute('aria-disabled');
