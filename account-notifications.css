@@ -4,3 +4,6 @@
 .optional{display:grid;grid-template-columns:minmax(0,1fr) minmax(250px,.7fr);gap:20px;margin-top:16px;padding:22px}.optional fieldset{display:grid;gap:10px;margin:0;padding:0;border:0}.optional label{padding:11px;border-radius:10px;background:#f8fafc;font-size:12px;font-weight:750}.optional input{width:auto;margin-right:8px}.history{margin-top:16px;padding:22px;text-align:center}.history p{max-width:650px;margin:7px auto 0}
 @media(max-width:760px){.channel-grid,.optional{grid-template-columns:1fr}.event-list article{grid-template-columns:38px minmax(0,1fr)}.event-list em{grid-column:2}}
 @media(max-width:460px){.channel-grid article{grid-template-columns:1fr}.channel-grid p{grid-column:auto}.channel-grid article>span{justify-self:start}.section-head{align-items:flex-start;flex-direction:column}}
+
+.company-context{margin:8px 0 0!important;color:var(--ink)!important;font-weight:800}
+#email-note{overflow-wrap:anywhere}.event-list article:last-child{border-bottom:0}
