@@ -25,162 +25,22 @@
   </main>
 <script type="module">
 import{createClient}from'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.115.0/+esm';
-
 const requestedCompanyId=new URLSearchParams(location.search).get('company_id');
 const pickCompanyRow=rows=>(rows||[]).find(row=>row?.company?.id===requestedCompanyId||row?.company_id===requestedCompanyId)||rows?.[0];
-if(requestedCompanyId){
-  document.querySelectorAll('a[href^="account-"]').forEach(a=>{
-    const u=new URL(a.getAttribute('href'),location.href);
-    u.searchParams.set('company_id',requestedCompanyId);
-    a.href=u.pathname.split('/').pop()+u.search;
-  });
-}
-
+if(requestedCompanyId){document.querySelectorAll('a[href^="account-"]').forEach(a=>{const u=new URL(a.getAttribute('href'),location.href);u.searchParams.set('company_id',requestedCompanyId);a.href=u.pathname.split('/').pop()+u.search})}
 const sb=createClient('https://rzhlcszqtuhkhfibygnk.supabase.co','sb_publishable_yhqWJ1eWUznBkqKwPogTrw_xCdCbFA-');
-const form=document.getElementById('branch-form');
-const state=document.getElementById('branch-save-state');
-const list=document.getElementById('branches');
-const el=id=>document.getElementById(id);
-const text=(id,value)=>{if(el(id))el(id).textContent=value};
-const esc=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
-const field=id=>el(id).value.trim();
-const hoursText=hours=>{
-  if(!hours)return '';
-  if(typeof hours==='string')return hours;
-  return hours.text||hours.label||'';
-};
-const messageFor=error=>{
-  const code=String(error?.message||'');
-  if(code.includes('authentication_required'))return 'Сессия истекла. Войдите в личный кабинет снова.';
-  if(code.includes('verified_owner_or_admin_required'))return 'Управлять филиалами может только подтверждённый владелец или администратор.';
-  if(code.includes('name_address_city_required'))return 'Заполните название филиала, адрес и город.';
-  if(code.includes('company_location_not_found'))return 'Филиал не найден. Обновите страницу.';
-  if(code.includes('invalid_company_location_action'))return 'Не удалось выполнить выбранное действие.';
-  if(code.includes('company_locations_company_id_canonical_address_key'))return 'Филиал с таким адресом уже сохранён.';
-  return code||'Не удалось выполнить действие.';
-};
-
-let company=null;
-let locations=[];
-
-const render=()=>{
-  const phones=locations.filter(location=>location.phone).length;
-  const missingHours=locations.filter(location=>location.status==='published'&&!hoursText(location.hours)).length;
-  const published=locations.filter(location=>location.status==='published').length;
-  text('branch-title','Филиалы');
-  text('branch-count',locations.length);
-  text('phone-count',phones);
-  text('hours-missing',missingHours);
-  text('data-state',published+' '+(published===1?'активен':'активны'));
-
-  if(!locations.length){
-    list.innerHTML='<article class="empty-branch"><span class="num">—</span><div><h2>Сохранённых филиалов пока нет</h2><p>Заполните форму выше — новый филиал сразу появится в этом разделе.</p></div><em>Пусто</em></article>';
-    text('data-note','Список филиалов компании пуст.');
-    return;
-  }
-
-  list.innerHTML=locations.map((location,index)=>{
-    const active=location.status==='published';
-    const status=active?'Опубликован':'Отключён';
-    const action=active?'archive':'publish';
-    const actionLabel=active?'Отключить':'Включить';
-    return '<article data-location-id="'+esc(location.id)+'">'+
-      '<span class="num">'+String(index+1).padStart(2,'0')+'</span>'+
-      '<div><h2>'+esc(location.name||location.address||'Филиал')+'</h2>'+
-      '<p>'+esc(location.address||'Адрес не указан')+' · '+esc(location.city||'Город не указан')+'</p>'+
-      '<dl><div><dt>Телефон</dt><dd>'+esc(location.phone||'Не указан')+'</dd></div>'+
-      '<div><dt>Часы</dt><dd>'+esc(hoursText(location.hours)||'Не указаны')+'</dd></div></dl></div>'+
-      '<em class="'+(active?'complete':'paused')+'">'+status+'</em>'+
-      '<div class="branch-actions"><button type="button" data-action="'+action+'">'+actionLabel+'</button>'+
-      '<button type="button" class="danger" data-action="delete">Удалить</button></div></article>';
-  }).join('');
-  text('data-note','Сохранено филиалов: '+locations.length+'. Опубликовано в профиле: '+published+'.');
-};
-
-const loadLocations=async()=>{
-  text('data-state','Загрузка');
-  const result=await sb.rpc('get_my_company_locations',{p_company_id:company.id});
-  if(result.error)throw result.error;
-  locations=Array.isArray(result.data)?result.data:[];
-  render();
-};
-
-const companyContext=(async()=>{
-  const auth=await sb.auth.getSession();
-  if(!auth.data.session)throw new Error('authentication_required');
-  const result=await sb.rpc('get_my_companies');
-  if(result.error)throw result.error;
-  const row=pickCompanyRow(result.data);
-  if(!row?.company)throw new Error('Компания не найдена.');
-  if(requestedCompanyId&&row.company.id!==requestedCompanyId)throw new Error('Выбранная компания недоступна.');
-  company=row.company;
-  text('editing-company-name',company.name||company.slug||'Компания');
-  if(!field('new-city')&&company.city)el('new-city').value=company.city;
-  await loadLocations();
-  return row;
-})();
-
-companyContext.catch(error=>{
-  state.textContent=messageFor(error);
-  form.querySelector('button').disabled=true;
-  text('data-state','Ошибка');
-  list.innerHTML='<article class="empty-branch"><span class="num">—</span><div><h2>Не удалось загрузить филиалы</h2><p>'+esc(messageFor(error))+'</p></div><em>Ошибка</em></article>';
-});
-
-form.addEventListener('submit',async event=>{
-  event.preventDefault();
-  const button=form.querySelector('button');
-  button.disabled=true;
-  state.textContent='Сохраняем филиал…';
-  try{
-    await companyContext;
-    const result=await sb.rpc('create_my_company_location',{
-      p_company_id:company.id,
-      p_name:field('new-name'),
-      p_address:field('new-address'),
-      p_city:field('new-city'),
-      p_phone:field('new-phone')||null,
-      p_hours:field('new-hours')?{text:field('new-hours')}:{},
-      p_official_url:company.website||null
-    });
-    if(result.error)throw result.error;
-    form.reset();
-    if(company.city)el('new-city').value=company.city;
-    state.textContent='Филиал сохранён и появился в списке ниже.';
-    await loadLocations();
-    el('saved-branches-title').scrollIntoView({behavior:'smooth',block:'start'});
-  }catch(error){
-    state.textContent=messageFor(error);
-  }finally{
-    button.disabled=false;
-  }
-});
-
-list.addEventListener('click',async event=>{
-  const button=event.target.closest('button[data-action]');
-  if(!button)return;
-  const card=button.closest('[data-location-id]');
-  const location=locations.find(item=>item.id===card?.dataset.locationId);
-  if(!location)return;
-  const action=button.dataset.action;
-  if(action==='delete'&&!confirm('Удалить филиал «'+(location.name||location.address)+'» без возможности восстановления?'))return;
-  if(action==='archive'&&!confirm('Отключить филиал? Он исчезнет из публичного профиля, но останется в кабинете.'))return;
-
-  card.querySelectorAll('button').forEach(control=>control.disabled=true);
-  state.textContent=action==='delete'?'Удаляем филиал…':action==='archive'?'Отключаем филиал…':'Публикуем филиал…';
-  try{
-    const result=await sb.rpc('manage_my_company_location',{
-      p_company_id:company.id,
-      p_location_id:location.id,
-      p_action:action
-    });
-    if(result.error)throw result.error;
-    state.textContent=action==='delete'?'Филиал удалён.':action==='archive'?'Филиал отключён и скрыт из публичного профиля.':'Филиал снова опубликован.';
-    await loadLocations();
-  }catch(error){
-    state.textContent=messageFor(error);
-    card.querySelectorAll('button').forEach(control=>control.disabled=false);
-  }
-});
-</script></body>
+const form=document.getElementById('branch-form'),state=document.getElementById('branch-save-state'),list=document.getElementById('branches');
+const el=id=>document.getElementById(id),text=(id,value)=>{if(el(id))el(id).textContent=value},esc=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char])),field=id=>el(id).value.trim();
+const hoursText=hours=>!hours?'':typeof hours==='string'?hours:(hours.text||hours.label||'');
+const messageFor=error=>{const code=String(error?.message||'');if(code.includes('authentication_required'))return 'Сессия истекла. Войдите в личный кабинет снова.';if(code.includes('verified_owner_or_admin_required'))return 'Управлять филиалами может только подтверждённый владелец или администратор.';if(code.includes('name_address_city_required'))return 'Заполните название филиала, адрес и город.';if(code.includes('company_location_not_found'))return 'Филиал не найден. Обновите страницу.';if(code.includes('invalid_company_location_action'))return 'Не удалось выполнить выбранное действие.';if(code.includes('company_locations_company_id_canonical_address_key'))return 'Филиал с таким адресом уже сохранён.';return code||'Не удалось выполнить действие.'};
+let company=null,locations=[];
+const render=()=>{const phones=locations.filter(x=>x.phone).length,missingHours=locations.filter(x=>x.status==='published'&&!hoursText(x.hours)).length,published=locations.filter(x=>x.status==='published').length;text('branch-title','Филиалы');text('branch-count',locations.length);text('phone-count',phones);text('hours-missing',missingHours);text('data-state',published+' '+(published===1?'активен':'активны'));if(!locations.length){list.innerHTML='<article class="empty-branch"><span class="num">—</span><div><h2>Сохранённых филиалов пока нет</h2><p>Заполните форму выше — новый филиал сразу появится в этом разделе.</p></div><em>Пусто</em></article>';text('data-note','Список филиалов компании пуст.');return}list.innerHTML=locations.map((location,index)=>{const active=location.status==='published',action=active?'archive':'publish';return '<article data-location-id="'+esc(location.id)+'"><span class="num">'+String(index+1).padStart(2,'0')+'</span><div><h2>'+esc(location.name||location.address||'Филиал')+'</h2><p>'+esc(location.address||'Адрес не указан')+' · '+esc(location.city||'Город не указан')+'</p><dl><div><dt>Телефон</dt><dd>'+esc(location.phone||'Не указан')+'</dd></div><div><dt>Часы</dt><dd>'+esc(hoursText(location.hours)||'Не указаны')+'</dd></div></dl></div><em class="'+(active?'complete':'paused')+'">'+(active?'Опубликован':'Отключён')+'</em><div class="branch-actions"><button type="button" data-action="'+action+'">'+(active?'Отключить':'Включить')+'</button><button type="button" class="danger" data-action="delete">Удалить</button></div></article>'}).join('');text('data-note','Сохранено филиалов: '+locations.length+'. Опубликовано в профиле: '+published+'.')};
+const loadLocations=async()=>{text('data-state','Загрузка');const result=await sb.rpc('get_my_company_locations',{p_company_id:company.id});if(result.error)throw result.error;locations=Array.isArray(result.data)?result.data:[];render()};
+const companyContext=(async()=>{const auth=await sb.auth.getSession();if(!auth.data.session)throw Error('authentication_required');const result=await sb.rpc('get_my_companies');if(result.error)throw result.error;const row=pickCompanyRow(result.data);if(!row?.company)throw Error('Компания не найдена.');if(requestedCompanyId&&row.company.id!==requestedCompanyId)throw Error('Выбранная компания недоступна.');company=row.company;text('editing-company-name',company.name||company.slug||'Компания');if(!field('new-city')&&company.city)el('new-city').value=company.city;await loadLocations();return row})();
+companyContext.catch(error=>{state.textContent=messageFor(error);form.querySelector('button').disabled=true;text('data-state','Ошибка');list.innerHTML='<article class="empty-branch"><span class="num">—</span><div><h2>Не удалось загрузить филиалы</h2><p>'+esc(messageFor(error))+'</p></div><em>Ошибка</em></article>'});
+form.addEventListener('submit',async event=>{event.preventDefault();const button=form.querySelector('button');button.disabled=true;state.textContent='Сохраняем филиал…';try{await companyContext;const result=await sb.rpc('create_my_company_location',{p_company_id:company.id,p_name:field('new-name'),p_address:field('new-address'),p_city:field('new-city'),p_phone:field('new-phone')||null,p_hours:field('new-hours')?{text:field('new-hours')}:{},p_official_url:company.website||null});if(result.error)throw result.error;form.reset();if(company.city)el('new-city').value=company.city;state.textContent='Филиал сохранён и появился в списке ниже.';await loadLocations();el('saved-branches-title').scrollIntoView({behavior:'smooth',block:'start'})}catch(error){state.textContent=messageFor(error)}finally{button.disabled=false}});
+list.addEventListener('click',async event=>{const button=event.target.closest('button[data-action]');if(!button)return;const card=button.closest('[data-location-id]'),location=locations.find(item=>item.id===card?.dataset.locationId);if(!location)return;const action=button.dataset.action;if(action==='delete'&&!confirm('Удалить филиал «'+(location.name||location.address)+'» без возможности восстановления?'))return;if(action==='archive'&&!confirm('Отключить филиал? Он исчезнет из публичного профиля, но останется в кабинете.'))return;card.querySelectorAll('button').forEach(control=>control.disabled=true);state.textContent=action==='delete'?'Удаляем филиал…':action==='archive'?'Отключаем филиал…':'Публикуем филиал…';try{const result=await sb.rpc('manage_my_company_location',{p_company_id:company.id,p_location_id:location.id,p_action:action});if(result.error)throw result.error;state.textContent=action==='delete'?'Филиал удалён.':action==='archive'?'Филиал отключён и скрыт из публичного профиля.':'Филиал снова опубликован.';await loadLocations()}catch(error){state.textContent=messageFor(error);card.querySelectorAll('button').forEach(control=>control.disabled=false)}});
+</script>
+<script type="module" src="account-company-context.js?v=20260909-1"></script>
+</body>
 </html>
