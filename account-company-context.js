@@ -11,7 +11,9 @@ function ensureStyles(){if(document.getElementById('active-company-context-style
 document.head.appendChild(style)}
 function hideLegacyContext(){const legacyName=document.getElementById('editing-company-name');if(!legacyName)return;const legacy=legacyName.closest('div');if(legacy&&!legacy.classList.contains('active-company-context')){legacy.hidden=true;legacy.setAttribute('aria-hidden','true')}}
 function mount(){ensureStyles();hideLegacyContext();let bar=document.querySelector('.active-company-context');if(!bar){bar=document.createElement('section');bar.className='active-company-context';const nav=document.querySelector('main nav[aria-label="Навигация кабинета"]');if(nav)nav.insertAdjacentElement('afterend',bar);else document.querySelector('main')?.prepend(bar)}bar.innerHTML='<div class="active-company-main"><div class="active-company-avatar" id="active-company-avatar">К</div><div class="active-company-copy"><small>Редактируется компания</small><strong id="active-company-name">Определяем компанию…</strong></div></div><a class="active-company-change" href="account-home.html">Сменить компанию</a>';return bar}
+function ensureMediaDecoder(){if(!location.pathname.endsWith('/account-media.html')&&!location.pathname.endsWith('account-media.html'))return;const nativeCreate=typeof window.createImageBitmap==='function'?window.createImageBitmap.bind(window):null;window.createImageBitmap=async source=>{if(nativeCreate){try{return await nativeCreate(source)}catch{}}return await new Promise((resolve,reject)=>{const url=URL.createObjectURL(source),img=new Image();img.onload=()=>{img.close=()=>URL.revokeObjectURL(url);resolve(img)};img.onerror=()=>{URL.revokeObjectURL(url);reject(Error('Не удалось прочитать выбранное изображение.'))};img.src=url})}}
 
+ensureMediaDecoder();
 keepContext();
 mount();
 
