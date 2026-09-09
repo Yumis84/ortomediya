@@ -8,51 +8,24 @@
   <title>Уведомления — предпросмотр | Отзыв.com</title>
   <link rel="icon" href="https://отзыв.com/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="account-notifications.css">
-  <script type="module" src="account-company-context.js"></script>
+  <script type="module" src="account-company-context.js?v=fab069e6"></script>
 </head>
 <body>
   <header><div class="wrap top"><a class="brand" href="https://отзыв.com/">отзыв<span>.com</span></a><b>ПРЕДПРОСМОТР ЛИЧНОГО КАБИНЕТА</b></div></header>
   <main class="wrap">
     <nav aria-label="Навигация кабинета"><a href="account-preview.html">Главная</a><a href="account-profile.html">Профиль</a><a href="account-branches.html">Филиалы</a><a href="account-services.html">Услуги</a><a href="account-media.html">Фото</a><a href="account-reviews.html">Отзывы</a><a href="account-billing.html">Тариф и оплата</a><a href="account-ai-assistant.html">AI-ассистент</a><a class="active" href="#notifications">Уведомления</a><a href="account-analytics.html">Статистика</a></nav>
     <section class="intro"><div><small>СООБЩЕНИЯ ВЛАДЕЛЬЦУ</small><h1>Уведомления</h1><p>События профиля, отзывов, оплаты и AI‑ассистента.</p><p class="company-context" id="company-context">Определяем текущую компанию…</p></div></section>
-    <section class="channel-grid">
-      <article><div><small>ОСНОВНОЙ КАНАЛ</small><h2>Электронная почта</h2></div><span id="email-status">ПРОВЕРЯЕМ</span><p id="email-note">Определяем адрес авторизованного аккаунта.</p><button disabled>Настроить</button></article>
-      <article><div><small>ДОПОЛНИТЕЛЬНЫЙ КАНАЛ</small><h2>Telegram</h2></div><span>НЕ ПОДКЛЮЧЁН</span><p>Канал можно будет подключить после появления модели настроек уведомлений и явного согласия владельца.</p><button disabled>Подключить</button></article>
-    </section>
-    <section class="events" id="notifications">
-      <div class="section-head"><div><small>ПЛАНИРУЕМЫЕ СОБЫТИЯ</small><h2>Что должно приходить владельцу</h2></div><b>Настройка пока недоступна</b></div>
-      <div class="event-list">
-        <article><span>01</span><div><h3>Изменение профиля</h3><p>Уведомление о важных изменениях данных компании и публикации обновлённой информации.</p></div><em>Будет подключено</em></article>
-        <article><span>02</span><div><h3>Новые отзывы</h3><p>Сообщение о новом отзыве и связанных с ним действиях владельца после запуска собственного потока отзывов.</p></div><em>Будет подключено</em></article>
-        <article><span>03</span><div><h3>Тариф и оплата</h3><p>Напоминания о сроках подписки, успешной оплате и других подтверждённых событиях биллинга.</p></div><em>Будет подключено</em></article>
-        <article><span>04</span><div><h3>Важные системные события</h3><p>Критичные изменения статуса профиля, которые требуют внимания владельца.</p></div><em>Будет подключено</em></article><article><span>05</span><div><h3>AI‑ассистент</h3><p>Новые обращения, ошибки передачи клиенту и предупреждения об остатке или окончании пакета запросов.</p></div><em>Будет подключено</em></article>
-      </div>
-    </section>
+    <section class="channel-grid"><article><div><small>ОСНОВНОЙ КАНАЛ</small><h2>Электронная почта</h2></div><span id="email-status">ПРОВЕРЯЕМ</span><p id="email-note">Определяем адрес авторизованного аккаунта.</p><button disabled>Настроить</button></article><article><div><small>ДОПОЛНИТЕЛЬНЫЙ КАНАЛ</small><h2>Telegram</h2></div><span>НЕ ПОДКЛЮЧЁН</span><p>Канал можно будет подключить после появления модели настроек уведомлений и явного согласия владельца.</p><button disabled>Подключить</button></article></section>
+    <section class="events" id="notifications"><div class="section-head"><div><small>ПЛАНИРУЕМЫЕ СОБЫТИЯ</small><h2>Что должно приходить владельцу</h2></div><b>Настройка пока недоступна</b></div><div class="event-list"><article><span>01</span><div><h3>Изменение профиля</h3><p>Уведомление о важных изменениях данных компании и публикации обновлённой информации.</p></div><em>Будет подключено</em></article><article><span>02</span><div><h3>Новые отзывы</h3><p>Сообщение о новом отзыве и связанных с ним действиях владельца после запуска собственного потока отзывов.</p></div><em>Будет подключено</em></article><article><span>03</span><div><h3>Тариф и оплата</h3><p>Напоминания о сроках подписки, успешной оплате и других подтверждённых событиях биллинга.</p></div><em>Будет подключено</em></article><article><span>04</span><div><h3>Важные системные события</h3><p>Критичные изменения статуса профиля, которые требуют внимания владельца.</p></div><em>Будет подключено</em></article><article><span>05</span><div><h3>AI‑ассистент</h3><p>Новые обращения, ошибки передачи клиенту и предупреждения об остатке или окончании пакета запросов.</p></div><em>Будет подключено</em></article></div></section>
     <section class="optional"><div><small>НАСТРОЙКИ</small><h2>Какие сообщения получать</h2><p>Персональные настройки частоты, каналов и типов сообщений требуют авторизации и отдельной модели уведомлений. Сейчас они не изменяют реальные данные.</p></div><fieldset disabled><label><input type="checkbox" checked> Изменение профиля</label><label><input type="checkbox" checked> Новые отзывы</label><label><input type="checkbox" checked> Тариф и оплата</label><label><input type="checkbox" checked> Важные системные события</label><label><input type="checkbox" checked> AI‑ассистент и обращения</label></fieldset></section>
     <section class="history"><small>ИСТОРИЯ ДОСТАВКИ</small><h2>Подтверждённых уведомлений пока нет</h2><p>В текущей базе нет записей пользовательских уведомлений или истории их доставки. Внутренние технические события не выдаются здесь как сообщения владельцу.</p></section>
     <p class="demo" id="data-note">Проверяем авторизацию и текущую компанию. Каналы отправки и сохранение настроек пока не подключены.</p>
   </main>
 <script type="module">
-const requestedCompanyId=new URLSearchParams(location.search).get('company_id');const pickCompanyRow=rows=>(rows||[]).find(row=>row?.company?.id===requestedCompanyId||row?.company_id===requestedCompanyId)||rows?.[0];const keepCompanyContext=()=>{if(!requestedCompanyId)return;document.querySelectorAll('a[href^="account-"]').forEach(a=>{const u=new URL(a.getAttribute('href'),location.href);u.searchParams.set('company_id',requestedCompanyId);a.href=u.pathname.split('/').pop()+u.search})};keepCompanyContext();
+const params=new URLSearchParams(location.search),urlCompanyId=params.get('company_id'),savedCompanyId=sessionStorage.getItem('otzovik_active_company_id'),requestedCompanyId=urlCompanyId||savedCompanyId;if(urlCompanyId)sessionStorage.setItem('otzovik_active_company_id',urlCompanyId);const pickCompanyRow=rows=>{const list=rows||[];if(requestedCompanyId)return list.find(row=>row?.company?.id===requestedCompanyId||row?.company_id===requestedCompanyId)||null;return list.length===1?list[0]:null};const keepCompanyContext=()=>{if(!requestedCompanyId)return;document.querySelectorAll('a[href^="account-"]').forEach(a=>{const u=new URL(a.getAttribute('href'),location.href);u.searchParams.set('company_id',requestedCompanyId);a.href=u.pathname.split('/').pop()+u.search})};keepCompanyContext();
 import{createClient}from'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.115.0/+esm';
 const s=createClient('https://rzhlcszqtuhkhfibygnk.supabase.co','sb_publishable_yhqWJ1eWUznBkqKwPogTrw_xCdCbFA-');
-try{
-  const result=await s.auth.getSession(),session=result.data.session,user=session?.user;
-  if(!user)throw Error('Сначала войдите в личный кабинет.');
-  const mine=await s.rpc('get_my_companies');
-  if(mine.error)throw mine.error;
-  const company=pickCompanyRow(mine.data)?.company;
-  if(!company)throw Error('Компания не найдена.');
-  document.getElementById('company-context').textContent=company.name+(company.city?' · '+company.city:'');
-  document.getElementById('email-status').textContent=user.email_confirmed_at?'ПОДТВЕРЖДЕНА':'НЕ ПОДТВЕРЖДЕНА';
-  document.getElementById('email-note').textContent=user.email?'Адрес аккаунта: '+user.email+'. Отправка уведомлений пока не подключена.':'Email аккаунта не указан.';
-  document.getElementById('data-note').textContent='Показаны настройки компании «'+company.name+'». Каналы отправки и сохранение предпочтений пока не подключены.';
-}catch(e){
-  document.getElementById('company-context').textContent='Компания не определена';
-  document.getElementById('email-status').textContent='НЕДОСТУПНА';
-  document.getElementById('email-note').textContent=e.message||'Не удалось получить данные аккаунта.';
-  document.getElementById('data-note').textContent='Настройки уведомлений недоступны без авторизации.';
-}
+try{const result=await s.auth.getSession(),session=result.data.session,user=session?.user;if(!user)throw Error('Сначала войдите в личный кабинет.');const mine=await s.rpc('get_my_companies');if(mine.error)throw mine.error;const rows=mine.data||[],company=pickCompanyRow(rows)?.company;if(!company)throw Error(rows.length>1?'Выберите компанию в разделе «Мои компании».':'Компания не найдена.');document.getElementById('company-context').textContent=company.name+(company.city?' · '+company.city:'');document.getElementById('email-status').textContent=user.email_confirmed_at?'ПОДТВЕРЖДЕНА':'НЕ ПОДТВЕРЖДЕНА';document.getElementById('email-note').textContent=user.email?'Адрес аккаунта: '+user.email+'. Отправка уведомлений пока не подключена.':'Email аккаунта не указан.';document.getElementById('data-note').textContent='Показаны настройки компании «'+company.name+'». Каналы отправки и сохранение предпочтений пока не подключены.'}catch(e){document.getElementById('company-context').textContent='Компания не определена';document.getElementById('email-status').textContent='НЕДОСТУПНА';document.getElementById('email-note').textContent=e.message||'Не удалось получить данные аккаунта.';document.getElementById('data-note').textContent='Настройки уведомлений недоступны без выбранной компании и авторизации.'}
 </script>
 </body>
 </html>
