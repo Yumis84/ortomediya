@@ -6,7 +6,7 @@ const savedCompanyId=sessionStorage.getItem('otzovik_active_company_id');
 const requestedCompanyId=urlCompanyId||savedCompanyId;
 if(urlCompanyId){sessionStorage.setItem('otzovik_active_company_id',urlCompanyId)}else if(savedCompanyId){const u=new URL(location.href);u.searchParams.set('company_id',savedCompanyId);history.replaceState(null,'',u.pathname+u.search+u.hash);params.set('company_id',savedCompanyId)}
 
-function esc(value){return String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[c]))}
+function esc(value){return String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function initials(name){return String(name||'Компания').trim().split(/\s+/).slice(0,2).map(x=>x[0]||'').join('').toUpperCase()||'К'}
 function ensureSourcesNav(){const nav=document.querySelector('main nav[aria-label="Навигация кабинета"]');if(!nav||nav.querySelector('a[href^="account-sources.html"]'))return;const link=document.createElement('a');link.href='account-sources.html';link.textContent='Источники отзывов';const reviews=[...nav.querySelectorAll('a')].find(a=>(a.getAttribute('href')||'').startsWith('account-reviews.html'));if(reviews)reviews.insertAdjacentElement('afterend',link);else nav.appendChild(link)}
 function keepContext(){if(!requestedCompanyId)return;document.querySelectorAll('a[href^="account-"]').forEach(a=>{const raw=a.getAttribute('href');if(!raw||raw.startsWith('account-home.html'))return;const u=new URL(raw,location.href);u.searchParams.set('company_id',requestedCompanyId);a.href=u.pathname.split('/').pop()+u.search})}
