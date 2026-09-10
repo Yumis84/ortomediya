@@ -8,6 +8,7 @@ if(urlCompanyId){sessionStorage.setItem('otzovik_active_company_id',urlCompanyId
 
 function esc(value){return String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function initials(name){return String(name||'Компания').trim().split(/\s+/).slice(0,2).map(x=>x[0]||'').join('').toUpperCase()||'К'}
+function ensureHomeNav(){const nav=document.querySelector('main nav[aria-label="Навигация кабинета"]');if(!nav)return;const first=nav.querySelector('a');if(!first)return;const href=first.getAttribute('href')||'';if(href.startsWith('account-preview.html')||href.startsWith('account-home.html')||first.textContent.trim()==='Главная'||first.textContent.trim()==='Мои компании'){first.href='account-home.html';first.textContent='Мои компании'}}
 function ensureSourcesNav(){const nav=document.querySelector('main nav[aria-label="Навигация кабинета"]');if(!nav)return;const existing=[...nav.querySelectorAll('a')].find(a=>{const href=a.getAttribute('href')||'';return href.startsWith('account-sources.html')||href==='#sources'||a.textContent.trim()==='Источники отзывов'});if(existing)return;const link=document.createElement('a');link.href='account-sources.html';link.textContent='Источники отзывов';const reviews=[...nav.querySelectorAll('a')].find(a=>(a.getAttribute('href')||'').startsWith('account-reviews.html')||a.getAttribute('href')==='#reviews'||a.textContent.trim()==='Отзывы');if(reviews)reviews.insertAdjacentElement('afterend',link);else nav.appendChild(link)}
 function keepContext(){if(!requestedCompanyId)return;document.querySelectorAll('a[href^="account-"]').forEach(a=>{const raw=a.getAttribute('href');if(!raw||raw.startsWith('account-home.html'))return;const u=new URL(raw,location.href);u.searchParams.set('company_id',requestedCompanyId);a.href=u.pathname.split('/').pop()+u.search})}
 function revealActiveNav(){const nav=document.querySelector('main nav[aria-label="Навигация кабинета"]');if(!nav)return;const active=nav.querySelector('a.active,[aria-current="page"]');if(!active)return;requestAnimationFrame(()=>requestAnimationFrame(()=>{const left=active.offsetLeft-(nav.clientWidth-active.offsetWidth)/2;nav.scrollTo({left:Math.max(0,left),behavior:'auto'})}))}
@@ -18,6 +19,7 @@ function mount(){ensureStyles();hideLegacyContext();let bar=document.querySelect
 function ensureMediaDecoder(){if(!location.pathname.endsWith('/account-media.html')&&!location.pathname.endsWith('account-media.html'))return;const nativeCreate=typeof window.createImageBitmap==='function'?window.createImageBitmap.bind(window):null;window.createImageBitmap=async source=>{if(nativeCreate){try{return await nativeCreate(source)}catch{}}return await new Promise((resolve,reject)=>{const url=URL.createObjectURL(source),img=new Image();img.onload=()=>{img.close=()=>URL.revokeObjectURL(url);resolve(img)};img.onerror=()=>{URL.revokeObjectURL(url);reject(Error('Не удалось прочитать выбранное изображение.'))};img.src=url})}}
 
 ensureMediaDecoder();
+ensureHomeNav();
 ensureSourcesNav();
 keepContext();
 mount();
