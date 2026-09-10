@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#101828">
+<title>Оставить отзыв | Отзыв.com</title>
+<link rel="icon" href="https://отзыв.com/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="review-submit.css?v=20260910-1">
+</head>
+<body>
+<header><div class="wrap top"><a class="brand" href="https://отзыв.com/">отзыв<span>.com</span></a><a id="back-link" href="profile.html#own">Вернуться к профилю</a></div></header>
+<main class="wrap">
+<section class="card">
+<div class="company"><small class="kicker">ОТЗЫВ ПОЛЬЗОВАТЕЛЯ</small><h1 id="company-name">Загружаем компанию…</h1><p class="muted" id="company-meta">Проверяем публичный профиль.</p></div>
+<div class="notice">Отзыв публикуется отдельно от рейтингов внешних площадок. Компания не может удалить его или изменить оценку. Спорные материалы проверяет модерация Отзыв.com.</div>
+<form id="review-form" novalidate>
+<div class="fields">
+<div><label>Ваша оценка *</label><div class="rating" aria-label="Оценка от 1 до 5"><input id="r5" name="rating" type="radio" value="5"><label for="r5" title="5">★</label><input id="r4" name="rating" type="radio" value="4"><label for="r4" title="4">★</label><input id="r3" name="rating" type="radio" value="3"><label for="r3" title="3">★</label><input id="r2" name="rating" type="radio" value="2"><label for="r2" title="2">★</label><input id="r1" name="rating" type="radio" value="1"><label for="r1" title="1">★</label></div></div>
+<div class="grid"><label>Имя для публикации *<input id="author" autocomplete="name" maxlength="80" placeholder="Например, Дмитрий"></label><label>E-mail *<input id="email" type="email" autocomplete="email" maxlength="254" placeholder="Для связи по модерации"></label></div>
+<label id="location-wrap" hidden>Филиал<select id="location"><option value="">Компания в целом</option></select></label>
+<label>Ваш отзыв *<textarea id="body" minlength="50" maxlength="5000" placeholder="Расскажите о личном опыте: что произошло, что понравилось или не понравилось. Минимум 50 символов."></textarea><span class="meta"><span id="counter">0</span> / 5000</span></label>
+<div class="checks"><label class="check"><input id="experience" type="checkbox"><span>Подтверждаю, что описываю собственный опыт взаимодействия с этой компанией.</span></label><label class="check"><input id="terms" type="checkbox"><span>Согласен с правилами публикации отзывов и обработкой данных, необходимой для модерации.</span></label></div>
+<button id="submit" type="submit">Отправить отзыв</button>
+<p id="state" class="state" role="status" aria-live="polite"></p>
+</div>
+</form>
+<div class="footnote">Перед отправкой в рабочей версии выполняется антибот-проверка. После приёма отзыв получает статус «На модерации». Безопасные отзывы могут пройти автоматическую первичную проверку, спорные — направляются администратору Отзыв.com.</div>
+</section>
+</main>
+<script type="module">
+import{createClient}from'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.115.0/+esm';
+const s=createClient('https://rzhlcszqtuhkhfibygnk.supabase.co','sb_publishable_yhqWJ1eWUznBkqKwPogTrw_xCdCbFA-');
+const $=id=>document.getElementById(id),params=new URLSearchParams(location.search),slug=(params.get('slug')||'ortomediya').trim().toLowerCase();
+let company=null;
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function state(message,type=''){const el=$('state');el.textContent=message;el.className='state'+(type?' '+type:'')}
+try{const result=await s.rpc('get_public_company_profile_v2',{p_slug:slug});if(result.error)throw result.error;company=result.data;if(!company)throw Error('Компания не найдена.');$('company-name').textContent='Отзыв о «'+company.name+'»';$('company-meta').textContent=[company.city,company.website].filter(Boolean).join(' · ');$('back-link').href=slug==='ortomediya'?'profile.html#own':'https://'+slug+'.xn--b1ajuq0c.com/#reviews';const locations=Array.isArray(company.locations)?company.locations:[];if(locations.length){$('location-wrap').hidden=false;$('location').insertAdjacentHTML('beforeend',locations.map(x=>'<option value="'+esc(x.id)+'">'+esc(x.name||x.address||x.city||'Филиал')+'</option>').join(''))}}catch(e){$('company-name').textContent='Не удалось открыть форму';$('company-meta').textContent=e.message||'Компания временно недоступна.';$('submit').disabled=true}
+$('body').addEventListener('input',()=>{$('counter').textContent=$('body').value.length});
+$('review-form').addEventListener('submit',e=>{e.preventDefault();if(!company)return;const rating=document.querySelector('input[name="rating"]:checked')?.value,author=$('author').value.trim(),email=$('email').value.trim(),body=$('body').value.trim();if(!rating)return state('Поставьте оценку от 1 до 5.','error');if(author.length<2)return state('Укажите имя для публикации.','error');if(!/^\S+@\S+\.\S+$/.test(email))return state('Укажите корректный e-mail.','error');if(body.length<50)return state('Отзыв должен содержать не менее 50 символов.','error');if(!$('experience').checked)return state('Подтвердите, что это ваш личный опыт.','error');if(!$('terms').checked)return state('Примите правила публикации и обработки данных.','error');state('Форма и проверка данных готовы. Отправка будет включена после подключения защищённого шлюза и Turnstile.','ok')});
+</script>
+</body>
+</html>
