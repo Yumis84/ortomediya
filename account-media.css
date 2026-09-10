@@ -1,5 +1,6 @@
 @import url("account-preview.css");
 .intro button,.media-card button,.upload-card button{padding:10px 13px;border:0;border-radius:10px;background:var(--ink);color:#fff;font:inherit;font-size:12px;font-weight:800;opacity:.55}
+.intro>button{display:none}
 .summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:16px}
 .summary article,.upload-card,.media-card,.rules{border:1px solid var(--line);border-radius:16px;background:#fff}
 .summary article{padding:16px}.summary b,.summary span{display:block}.summary b{font-size:22px}.summary span{color:var(--muted);font-size:11px}
